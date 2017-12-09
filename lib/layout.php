@@ -21,7 +21,7 @@ function RenderTemplate($template, $options=null) {
 		if (!file_exists($tplname))
 			$tplname = $tplroot.'wwxd/'.$template.'.tpl';
 	} else {
-		if (Settings::get('defaultLayout') == "")
+		if (Settings::get('defaultLayout') == '')
 			$tplname = $tplroot.Settings::get('defaultLayout').$template.'.tpl';
 		else
 			$tplname = $tplroot.'wwxd/'.$template.'.tpl';
@@ -39,9 +39,9 @@ function makeCrumbs($path, $links='') {
 	global $layout_crumbs, $layout_actionlinks;
 
 	if(count($path) != 0) {
-		$pathPrefix = [actionLink(0) => Settings::get("breadcrumbsMainName")];
+		$pathPrefix = [actionLink(0) => Settings::get('breadcrumbsMainName')];
 
-		$bucket = "breadcrumbs"; include(__DIR__."/pluginloader.php");
+		$bucket = 'breadcrumbs'; include(__DIR__.'/pluginloader.php');
 
 		$path = $pathPrefix + $path;
 	}
@@ -52,8 +52,8 @@ function makeCrumbs($path, $links='') {
 
 function makeBreadcrumbs($path) {
 	global $layout_crumbs;
-	$path->addStart(new PipeMenuLinkEntry(Settings::get("breadcrumbsMainName"), "board"));
-	$path->setClass("breadcrumbs");
+	$path->addStart(new PipeMenuLinkEntry(Settings::get('breadcrumbsMainName'), 'board'));
+	$path->setClass('breadcrumbs');
 	$bucket = "breadcrumbs"; include("lib/pluginloader.php");
 	$layout_crumbs = $path;
 }
@@ -83,7 +83,7 @@ function makeForumList($fieldname, $selectedID, $allowNone=false) {
 	$noneOption = '';
 	if ($allowNone) $noneOption = '<option value=0>'.__('(none)').'</option>';
 
-	$rCats = Query("SELECT id, name, board FROM {categories} ORDER BY board, corder, id");
+	$rCats = Query('SELECT id, name, board FROM {categories} ORDER BY board, corder, id');
 	$cats = [];
 	while ($cat = Fetch($rCats))
 		$cats[$cat['id']] = $cat;
