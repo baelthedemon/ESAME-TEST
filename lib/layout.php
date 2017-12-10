@@ -141,7 +141,7 @@ function makeForumCrumbs($crumbs, $forum) {
 	while(true) {
 		$crumbs->addStart(new PipeMenuLinkEntry($forum['title'], 'forum', $forum['id']));
 		if($forum['catid'] >= 0) break;
-		$forum = Fetch(Query("SELECT * from {forums} WHERE id={0}", -$forum['catid']));
+		$forum = Fetch(Query('SELECT * from {forums} WHERE id={0}', -$forum['catid']));
 	}
 }
 
@@ -198,7 +198,7 @@ function rForaQuery($parent, $boardlol='', $viewableforums, $viewhidden ) {
 
 function rSubfora($parent, $boardlol='', $viewableforums, $viewhidden) {
     global $loguserid, $loguser, $usergroups;
-    $f = Fetch(Query("SELECT MIN(l) minl, MAX(r) maxr FROM {forums} WHERE ".($parent==0 ? 'board={0}' : 'catid={1}'), $boardlol, -$parent));
+    $f = Fetch(Query('SELECT MIN(l) minl, MAX(r) maxr FROM {forums} WHERE '.($parent==0 ? 'board={0}' : 'catid={1}'), $boardlol, -$parent));
     $rSubfora = Query('	SELECT f.*,
 							'.($loguserid ? '(NOT ISNULL(i.fid))' : '0').' ignored,
 							(SELECT COUNT(*) FROM {threads} t'.($loguserid ? ' LEFT JOIN {threadsread} tr ON tr.thread=t.id AND tr.id={0}' : '').'
@@ -212,7 +212,7 @@ function rSubfora($parent, $boardlol='', $viewableforums, $viewhidden) {
 }
 
 function rMods() {
-    $f = Fetch(Query("SELECT MIN(l) minl, MAX(r) maxr FROM {forums} WHERE ".($parent==0 ? 'board={0}' : 'catid={1}'), $boardlol, -$parent));
+    $f = Fetch(Query('SELECT MIN(l) minl, MAX(r) maxr FROM {forums} WHERE '.($parent==0 ? 'board={0}' : 'catid={1}'), $boardlol, -$parent));
     $rMods = Query('	SELECT
 							p.(arg, applyto, id),
 							u.(_userfields)
@@ -227,7 +227,7 @@ function rMods() {
 }
 function sForums($parent, $boardlol='') {
     global $loguserid, $loguser, $usergroups;
-    $f = Fetch(Query("SELECT MIN(l) minl, MAX(r) maxr FROM {forums} WHERE ".($parent==0 ? 'board={0}' : 'catid={1}'), $boardlol, -$parent));
+    $f = Fetch(Query('SELECT MIN(l) minl, MAX(r) maxr FROM {forums} WHERE '.($parent==0 ? 'board={0}' : 'catid={1}'), $boardlol, -$parent));
     $sForums = Query('	SELECT f.id, f.numthreads, f.numposts, f.lastpostid, f.lastpostname, f.lastpostuser, f.lastpostdate,
 											'.($loguserid ? '(NOT ISNULL(i.fid))' : '0').' ignored,
 											(SELECT COUNT(*), t.title FROM {threads} t'.($loguserid ? ' LEFT JOIN {threadsread} tr ON tr.thread=t.id AND tr.id={0}' : '').'
@@ -354,7 +354,7 @@ function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum 
 		$urlname = $ispublic ? $tags[0] : '';
 
 		$threadlink = actionLinkTag($tags[0], 'thread', $thread['id'], '', $urlname);
-		$tdata['link'] = (Settings::get("tagsDirection") === 'Left') ? $tags[1].' '.$threadlink : $threadlink.' '.$tags[1];
+		$tdata['link'] = (Settings::get('tagsDirection') === 'Left') ? $tags[1].' '.$threadlink : $threadlink.' '.$tags[1];
 
 
 		$NewIcon = '';
@@ -373,7 +373,7 @@ function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum 
 				$tdata['gotonew'] = actionLinkTag('<img src="'.resourceLink('img/gotounread.png').'" alt="[go to first unread post]">',
 					'post', '', 'tid='.$thread['id'].'&time='.(int)$thread['readdate']);
 			}
-		} else if(!$thread['closed'] && !$thread['sticky'] && Settings::get("oldThreadThreshold") > 0 && $thread['lastpostdate'] < time() - (2592000 * Settings::get("oldThreadThreshold")))
+		} else if(!$thread['closed'] && !$thread['sticky'] && Settings::get('oldThreadThreshold') > 0 && $thread['lastpostdate'] < time() - (2592000 * Settings::get('oldThreadThreshold')))
 			$NewIcon = 'old';
 
 		if($NewIcon)
@@ -386,13 +386,13 @@ function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum 
 
 		if($thread['icon']) {
 			//This is a hack, but given how icons are stored in the DB, I can do nothing about it without breaking DB compatibility.
-			if(startsWith($thread['icon'], "img/"))
+			if(startsWith($thread['icon'], 'img/'))
 				$thread['icon'] = resourceLink($thread['icon']);
 			$tdata['icon'] = "<img src=\"".htmlspecialchars($thread['icon'])."\" alt=\"\" class=\"smiley\" style=\"max-width:32px; max-height:32px;\">";
 		} else
 			$tdata['icon'] = '';
 
-		$tdata['poll'] = ($thread['poll'] ? "<img src=\"".resourceLink("img/poll.png")."\" alt=\"[poll]\">" : "");
+		$tdata['poll'] = ($thread['poll'] ? '<img src=\"'.resourceLink('img/poll.png').'\" alt=\"[poll]\">' : '');
 
 
 		$n = 4;
@@ -405,21 +405,21 @@ function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum 
 		$pl = '';
 		if($numpages <= $n * 2) {
 			for($i = 1; $i <= $numpages; $i++)
-				$pl .= " ".actionLinkTag($i+1, "thread", $thread['id'], "from=".($i * $ppp), $urlname);
+				$pl .= " ".actionLinkTag($i+1, 'thread', $thread['id'], 'from='.($i * $ppp), $urlname);
 		} else {
 			for($i = 1; $i < $n; $i++)
-			$pl .= " ".actionLinkTag($i+1, "thread", $thread['id'], "from=".($i * $ppp), $urlname);
-			$pl .= " &hellip; ";
+			$pl .= ' '.actionLinkTag($i+1, 'thread', $thread['id'], 'from='.($i * $ppp), $urlname);
+			$pl .= ' &hellip; ';
 			for($i = $numpages - $n + 1; $i <= $numpages; $i++)
-				$pl .= " ".actionLinkTag($i+1, "thread", $thread['id'], "from=".($i * $ppp), $urlname);
+				$pl .= ' '.actionLinkTag($i+1, 'thread', $thread['id'], 'from='.($i * $ppp), $urlname);
 		}
 		if($pl)
-			$tdata['pagelinks'] = actionLinkTag(1, "thread", $thread['id'], '', $urlname).$pl;
+			$tdata['pagelinks'] = actionLinkTag(1, 'thread', $thread['id'], '', $urlname).$pl;
 		else
 			$tdata['pagelinks'] = '';
 
 		if ($showforum)
-			$tdata['forumlink'] = actionLinkTag(htmlspecialchars($thread["f_title"]), "forum", $thread["f_id"], "", $ispublic?$thread["f_title"]:'');
+			$tdata['forumlink'] = actionLinkTag(htmlspecialchars($thread['f_title']), 'forum', $thread['f_id'], '', $ispublic?$thread['f_title']:'');
 
 		$tdata['startuser'] = UserLink($starter);
 
@@ -428,7 +428,7 @@ function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum 
 
 		$tdata['lastpostdate'] = formatdate($thread['lastpostdate']);
 		$tdata['lastpostuser'] = UserLink($last);
-		$tdata['lastpostlink'] = actionLink("post", $thread['lastpostid']);
+		$tdata['lastpostlink'] = actionLink('post', $thread['lastpostid']);
 
 		$threadlist[$tdata['id']] = $tdata;
 	}
@@ -441,17 +441,17 @@ function makeAnncBar() {
 
 	$anncforum = Settings::get('anncForum');
 	if ($anncforum > 0) {
-		$annc = Query("	SELECT
+		$annc = Query('	SELECT
 							t.id, t.title, t.icon, t.poll, t.forum,
 							t.date anncdate,
-							".($loguserid ? "tr.date readdate," : '')."
+							'.($loguserid ? 'tr.date readdate,' : '').'
 							u.(_userfields)
 						FROM
 							{threads} t
-							".($loguserid ? "LEFT JOIN {threadsread} tr ON tr.thread=t.id AND tr.id={1}" : '')."
+							'.($loguserid ? 'LEFT JOIN {threadsread} tr ON tr.thread=t.id AND tr.id={1}' : '').'
 							LEFT JOIN {users} u ON u.id=t.user
 						WHERE forum={0}
-						ORDER BY anncdate DESC LIMIT 1", $anncforum, $loguserid);
+						ORDER BY anncdate DESC LIMIT 1', $anncforum, $loguserid);
 
 		if ($annc && NumRows($annc)) {
 			$annc = Fetch($annc);
@@ -474,12 +474,12 @@ function makeAnncBar() {
 	}
 }
 
-function DoSmileyBar($taname = "text") {
+function DoSmileyBar($taname = 'text') {
 	global $smiliesOrdered;
 	$expandAt = 100;
 	LoadSmiliesOrdered();
 	print '<table class="message margin">
-		<tr class="header0"><th>'.__("Smilies").'</th></tr>
+		<tr class="header0"><th>'.__('Smilies').'</th></tr>
 		<tr class="cell0"><td id="smiliesContainer">';
 
 	if(count($smiliesOrdered) > $expandAt)
@@ -490,7 +490,7 @@ function DoSmileyBar($taname = "text") {
 	foreach($smiliesOrdered as $s) {
 		if($i == $expandAt)
 			print "</div><div class=\"smilies\" id=\"expandedSet\">";
-		print "<img src=\"".resourceLink("img/smilies/".$s['image'])."\" alt=\"".htmlentities($s['code'])."\" title=\"".htmlentities($s['code'])."\" onclick=\"insertSmiley(' ".str_replace("'", "\'", $s['code'])." ');\" />";
+		print '<img src=\"'.resourceLink('img/smilies/'.$s['image']).'\" alt=\"'.htmlentities($s['code']).'\" title=\"'.htmlentities($s['code'])."\" onclick=\"insertSmiley(' ".str_replace("'", "\'", $s['code'])." ');\" />";
 		$i++;
 	}
 
@@ -500,52 +500,53 @@ function DoSmileyBar($taname = "text") {
 function DoPostHelp() {
 	write("
 	<table class=\"message margin\">
-		<tr class=\"header0\"><th>".__("Post help")."</th></tr>
+		<tr class=\"header0\"><th>".__('Post help')."</th></tr>
 		<tr class=\"cell0\"><td>
 			<button class=\"expander\" id=\"postHelpExpand\" onclick=\"expandPostHelp();\">&#x25BC;</button>
 			<div id=\"commonHelp\" class=\"left\">
-				<h4>".__("Presentation")."</h4>
-				[b]&hellip;[/b] &mdash; <strong>".__("bold type")."</strong> <br />
-				[i]&hellip;[/i] &mdash; <em>".__("italic")."</em> <br />
-				[u]&hellip;[/u] &mdash; <span class=\"underline\">".__("underlined")."</span> <br />
-				[s]&hellip;[/s] &mdash; <del>".__("strikethrough")."</del><br />
+				<h4>".__('Presentation')."</h4>
+				[b]&hellip;[/b] &mdash; <strong>".__('bold type')."</strong> <br />
+				[i]&hellip;[/i] &mdash; <em>".__('italic')."</em> <br />
+				[u]&hellip;[/u] &mdash; <span class=\"underline\">".__('underlined')."</span> <br />
+				[s]&hellip;[/s] &mdash; <del>".__('strikethroug')."</del><br />
 			</div>
 			<div id=\"expandedHelp\" class=\"left\">
-				[code]&hellip;[/code] &mdash; <code>".__("code block")."</code> <br />
-				[spoiler]&hellip;[/spoiler] &mdash; ".__("spoiler block")." <br />
+				[code]&hellip;[/code] &mdash; <code>".__('code block')."</code> <br />
+				[spoiler]&hellip;[/spoiler] &mdash; ".__('spoiler block"')." <br />
 				[spoiler=&hellip;]&hellip;[/spoiler] <br />
-				[source]&hellip;[/source] &mdash; ".__("colorcoded block, assuming C#")." <br />
-				[source=&hellip;]&hellip;[/source] &mdash; ".__("colorcoded block, specific language")."<sup title=\"bnf, c, cpp, csharp, html4strict, irc, javascript, lolcode, lua, mysql, php, qbasic, vbnet, xml\">[".__("which?")."]</sup> <br />
+				[source]&hellip;[/source] &mdash; ".__('colorcoded block, assuming C#')." <br />
+				[source=&hellip;]&hellip;[/source] &mdash; ".__('colorcoded block, specific language')."<sup title=\"bnf, c, cpp, csharp, html4strict, irc, javascript, lolcode, lua, mysql, php, qbasic, vbnet, xml\">[".__('which?')."]</sup> <br />
 	");
-	$bucket = "postHelpPresentation"; include("./lib/pluginloader.php");
+	$bucket = 'postHelpPresentation'; include('./lib/pluginloader.php');
 	write("
 				<br />
-				<h4>".__("Links")."</h4>
-				[img]http://&hellip;[/img] &mdash; ".__("insert image")." <br />
+				<h4>".__('Links')."</h4>
+				[img]http://&hellip;[/img] &mdash; ".__('insert image')." <br />
 				[url]http://&hellip;[/url] <br />
 				[url=http://&hellip;]&hellip;[/url] <br />
-				>>&hellip; &mdash; ".__("link to post by ID")." <br />
+				>>&hellip; &mdash; ".__('link to post by ID')." <br />
 				[user=##] &mdash; ".__("link to user's profile by ID")." <br />
 	");
-	$bucket = "postHelpLinks"; include("./lib/pluginloader.php");
-	write("
+	$bucket = 'postHelpLinks'; include('./lib/pluginloader.php');
+
+	write('
 				<br />
 				<h4>".__("Quotations")."</h4>
 				[quote]&hellip;[/quote] &mdash; ".__("untitled quote")."<br />
 				[quote=&hellip;]&hellip;[/quote] &mdash; ".__("\"Posted by &hellip;\"")." <br />
 				[quote=\"&hellip;\" id=\"&hellip;\"]&hellip;[/quote] &mdash; \"".__("\"Post by &hellip;\" with link by post ID")." <br />
-	");
+	');
 	$bucket = "postHelpQuotations"; include("./lib/pluginloader.php");
 	write("
 				<br />
-				<h4>".__("Embeds")."</h4>
+				<h4>".__('Embeds')."</h4>
 	");
-	$bucket = "postHelpEmbeds"; include("./lib/pluginloader.php");
-	write("
+	$bucket = 'postHelpEmbeds'; include('./lib/pluginloader.php');
+	write('
 			</div>
 			<br />
 			".__("Most plain HTML also allowed.")."
 		</td></tr>
 	</table>
-	");
+	');
 }
