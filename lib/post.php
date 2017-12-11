@@ -5,7 +5,10 @@ if (!defined('BLARG')) die();
 function ParseThreadTags($title) {
 	preg_match_all("/\[(.*?)\]/", $title, $matches);
 	foreach($matches[1] as $tag) {
-		$title = str_replace("[".$tag."]", "", $title);
+
+	    if(strpos($title,"[".$tag."]")!==FALSE)
+		    $title = str_replace("[".$tag."]", "", $title);
+
 		$tag = htmlspecialchars(strtolower($tag));
 
 		//Start at a hue that makes "18" red.
@@ -57,7 +60,10 @@ function applyTags($text, $tags) {
 		return $text;
 	$s = $text;
 	foreach($tags as $tag => $val)
-		$s = str_replace("&".$tag."&", $val, $s);
+
+	    if(strpos($s,"&".$tag."&")!==FALSE)
+		    $s = str_replace("&".$tag."&", $val, $s);
+
 	if(is_numeric($tags['postcount']))
 		$s = preg_replace_callback('@&(\d+)&@si', [new MaxPosts($tags), 'max_posts_callback'], $s);
 	else
