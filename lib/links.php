@@ -63,11 +63,11 @@ function actionLinkTagItem($text, $action, $id='', $args='', $urlname='', $title
 }
 
 function actionLinkTagConfirm($text, $prompt, $action, $id='', $args='') {
-	return '<a onclick="return confirm(\'".$prompt."\'); " href="'.htmlentities(actionLink($action, $id, $args)).'">'.$text.'</a>';
+	return '<a onclick="return confirm(\" '.$prompt.' \");" href=" '.htmlentities(actionLink($action, $id, $args)).' ">'.$text.'</a>';
 }
 
 function actionLinkTagItemConfirm($text, $prompt, $action, $id='', $args='') {
-	return '<li><a onclick="return confirm(\".$prompt."\'); " href="'.htmlentities(actionLink($action, $id, $args)).'">'.$text.'</a></li>';
+	return '<li><a onclick="return confirm(\' '.$prompt.' \');" href=" '.htmlentities(actionLink($action, $id, $args)).' ">'.$text.'</a></li>';
 }
 
 function getForm($action, $id='') {

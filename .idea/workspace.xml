@@ -50,12 +50,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="yaml.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="yaml.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/yaml.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="40">
               <caret line="703" column="14" lean-forward="false" selection-start-line="703" selection-start-column="14" selection-end-line="703" selection-end-column="14" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="links.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/links.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="66" column="1" lean-forward="true" selection-start-line="66" selection-start-column="1" selection-end-line="66" selection-end-column="1" />
+              <folding>
+                <marker date="1513088943380" expanded="true" signature="3071:3077" ph="&amp;nbsp;" />
+                <marker date="1513088943380" expanded="true" signature="5905:5957" ph="SELECT u.(_u... users" />
+                <marker date="1513088943380" expanded="true" signature="7071:7079" ph="&amp;##x00AB;" />
+                <marker date="1513088943380" expanded="true" signature="7235:7243" ph="&amp;##x2039;" />
+                <marker date="1513088943380" expanded="true" signature="7456:7464" ph="&amp;##x203A;" />
+                <marker date="1513088943380" expanded="true" signature="7583:7591" ph="&amp;##x00BB;" />
+                <marker date="1513088943380" expanded="true" signature="8364:8372" ph="&amp;##x00BB;" />
+                <marker date="1513088943380" expanded="true" signature="8519:8527" ph="&amp;##x203A;" />
+                <marker date="1513088943380" expanded="true" signature="8730:8738" ph="&amp;##x2039;" />
+                <marker date="1513088943380" expanded="true" signature="8848:8856" ph="&amp;##x00AB;" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -196,7 +217,6 @@
         <option value="$PROJECT_DIR$/lib/bbcode_callbacks.php" />
         <option value="$PROJECT_DIR$/lib/firewall.php" />
         <option value="$PROJECT_DIR$/lib/layout.php" />
-        <option value="$PROJECT_DIR$/lib/links.php" />
         <option value="$PROJECT_DIR$/lib/loguser.php" />
         <option value="$PROJECT_DIR$/lib/mysql.php" />
         <option value="$PROJECT_DIR$/lib/notifications.php" />
@@ -210,6 +230,7 @@
         <option value="$PROJECT_DIR$/lib/permstrings.php" />
         <option value="$PROJECT_DIR$/lib/pluginsystem.php" />
         <option value="$PROJECT_DIR$/lib/yaml.php" />
+        <option value="$PROJECT_DIR$/lib/links.php" />
       </list>
     </option>
   </component>
@@ -221,7 +242,7 @@
   </component>
   <component name="PhpDebugGeneral" listening_started="true" />
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-7" />
     <option name="y" value="30" />
     <option name="width" value="697" />
@@ -569,7 +590,7 @@
       <workItem from="1512903595417" duration="1894000" />
       <workItem from="1512993598348" duration="524000" />
       <workItem from="1513004345817" duration="6146000" />
-      <workItem from="1513080635043" duration="7269000" />
+      <workItem from="1513080635043" duration="8187000" />
     </task>
     <task id="LOCAL-00001" summary="references #8753 @1h &#10;Completato file settingsfile.php">
       <created>1512782211128</created>
@@ -715,10 +736,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32577000" />
+    <option name="totallyTimeSpent" value="33495000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="30" width="697" height="745" extended-state="1" />
+    <frame x="-8" y="22" width="1382" height="754" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -733,7 +754,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24229075" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24229075" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1264,25 +1285,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/links.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="70" column="1" lean-forward="true" selection-start-line="70" selection-start-column="1" selection-end-line="70" selection-end-column="1" />
-          <folding>
-            <marker date="1513087434177" expanded="true" signature="3064:3070" ph="&amp;nbsp;" />
-            <marker date="1513087434177" expanded="true" signature="5898:5950" ph="SELECT u.(_u... users" />
-            <marker date="1513087434177" expanded="true" signature="7064:7072" ph="&amp;##x00AB;" />
-            <marker date="1513087434177" expanded="true" signature="7228:7236" ph="&amp;##x2039;" />
-            <marker date="1513087434177" expanded="true" signature="7449:7457" ph="&amp;##x203A;" />
-            <marker date="1513087434177" expanded="true" signature="7576:7584" ph="&amp;##x00BB;" />
-            <marker date="1513087434177" expanded="true" signature="8357:8365" ph="&amp;##x00BB;" />
-            <marker date="1513087434177" expanded="true" signature="8512:8520" ph="&amp;##x203A;" />
-            <marker date="1513087434177" expanded="true" signature="8723:8731" ph="&amp;##x2039;" />
-            <marker date="1513087434177" expanded="true" signature="8841:8849" ph="&amp;##x00AB;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/layout.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="253">
@@ -1507,6 +1509,25 @@
         <state relative-caret-position="40">
           <caret line="703" column="14" lean-forward="false" selection-start-line="703" selection-start-column="14" selection-end-line="703" selection-end-column="14" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/links.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="66" column="1" lean-forward="true" selection-start-line="66" selection-start-column="1" selection-end-line="66" selection-end-column="1" />
+          <folding>
+            <marker date="1513088943380" expanded="true" signature="3071:3077" ph="&amp;nbsp;" />
+            <marker date="1513088943380" expanded="true" signature="5905:5957" ph="SELECT u.(_u... users" />
+            <marker date="1513088943380" expanded="true" signature="7071:7079" ph="&amp;##x00AB;" />
+            <marker date="1513088943380" expanded="true" signature="7235:7243" ph="&amp;##x2039;" />
+            <marker date="1513088943380" expanded="true" signature="7456:7464" ph="&amp;##x203A;" />
+            <marker date="1513088943380" expanded="true" signature="7583:7591" ph="&amp;##x00BB;" />
+            <marker date="1513088943380" expanded="true" signature="8364:8372" ph="&amp;##x00BB;" />
+            <marker date="1513088943380" expanded="true" signature="8519:8527" ph="&amp;##x203A;" />
+            <marker date="1513088943380" expanded="true" signature="8730:8738" ph="&amp;##x2039;" />
+            <marker date="1513088943380" expanded="true" signature="8848:8856" ph="&amp;##x00AB;" />
+          </folding>
         </state>
       </provider>
     </entry>
