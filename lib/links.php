@@ -8,10 +8,10 @@ $siteURL = 'http' . $ishttps ? 's' : '' . '://' . SITE_URL . '/';
 function urlNamify($urlname) {
 	$urlname = strtolower($urlname);
 	$urlname = str_replace('&', 'and', $urlname);
-	$urlname = preg_replace("/[^a-zA-Z0-9]/", '-', $urlname);
-	$urlname = preg_replace("/-+/", '-', $urlname);
-	$urlname = preg_replace("/^-/", '', $urlname);
-	$urlname = preg_replace("/-$/", '', $urlname);
+	$urlname = preg_replace('/[^a-zA-Z0-9]/', '-', $urlname);
+	$urlname = preg_replace('/-+/', '-', $urlname);
+	$urlname = preg_replace('/^-/', '', $urlname);
+	$urlname = preg_replace('/-$/', '', $urlname);
 	return $urlname;
 }
 
@@ -26,12 +26,12 @@ function actionLink($action, $id='', $args='', $urlname='') {
 	// rewritten links
 	if ($action == MAIN_PAGE)
 		$action = '';
-	else if ($hasid)
+	else if ($hasid == true)
 		$action .= '/';
 	else
 		$action .= '';
 
-	if ($hasid) {
+	if ($hasid == true) {
 		if ($urlname) $id .= '-'.urlNamify($urlname);
 		$id .= '';
 	} else
@@ -46,11 +46,11 @@ function pageLink($page, $params=[], $extra='') {
 	return $router->generate($page, $params) . ($extra != '' ? '?' . $extra : '');
 }
 
-function pageLinkTag($text, $page, $params=[], $extra='', $title="") {
+function pageLinkTag($text, $page, $params=[], $extra='', $title='') {
 	return '<a href="'.htmlentities(pageLink($page, $params, $extra)).'" title="'. $title . '">'.$text.'</a>';
 }
 
-function actionLinkTag($text, $action, $id='', $args="", $urlname='', $title='') {
+function actionLinkTag($text, $action, $id='', $args='', $urlname='', $title='') {
 	return '<a href="'.htmlentities(actionLink($action, $id, $args, $urlname)).'" title="'. $title . '">'.$text.'</a>';
 }
 
@@ -181,7 +181,7 @@ function userLink($user, $showMinipic = false, $customID = false, $returnOnlyHre
 	if (!$isbanned && $luckybastards && in_array($user['id'], $luckybastards)) {
 		$classing = ' style="text-shadow:0px 0px 4px;"';
 		$fname = prettyRainbow($fname);
-	} else if ($dorainbow) {
+	} else if ($dorainbow == true) {
 		if (!$isbanned)
 			$classing = ' style="color:hsl('.$poptart.',100%,80.4%);"';
 		$poptart += 31;
@@ -271,7 +271,7 @@ function pageLinks($url, $epp, $from, $total) {
 			$pageLinks[] = '<a class=\"pagelink\"  href=\"".makeFromUrl($url, (($p-1) * $epp))."\">'.$p.'</a>';
 	}
 
-	return $first.$prev.join($pageLinks, "").$next.$last;
+	return $first.$prev.join($pageLinks, '').$next.$last;
 }
 
 function pageLinksInverted($url, $epp, $from, $total) {
@@ -330,7 +330,7 @@ function getServerURL($https = false) {
 
 function getServerURLNoSlash($https = false) {
 	global $serverport;
-	return ($https?"https":"http") . "://" . $_SERVER['SERVER_NAME'].$serverport . substr(URL_ROOT, 0, strlen(URL_ROOT)-1);
+	return ($https?'https':'http') . '://' . $_SERVER['SERVER_NAME'].$serverport . substr(URL_ROOT, 0, strlen(URL_ROOT)-1);
 }
 
 function getFullRequestedURL($https = false) {

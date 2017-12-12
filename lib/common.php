@@ -28,22 +28,21 @@ if (!function_exists('password_hash'))
 
 
 // Deslash GPC variables if we have magic quotes on
-if (get_magic_quotes_gpc()) {
-	function AutoDeslash($val) {
-		if (is_array($val))
-			return array_map('AutoDeslash', $val);
-		else if (is_string($val))
-			return stripslashes($val);
-		else
-			return $val;
-	}
-
+if (get_magic_quotes_gpc() == true) {
 	$_REQUEST = array_map('AutoDeslash', $_REQUEST);
 	$_GET = array_map('AutoDeslash', $_GET);
 	$_POST = array_map('AutoDeslash', $_POST);
 	$_COOKIE = array_map('AutoDeslash', $_COOKIE);
 }
 
+function AutoDeslash($val) {
+    if (is_array($val))
+        return array_map('AutoDeslash', $val);
+    else if (is_string($val))
+        return stripslashes($val);
+    else
+        return $val;
+}
 function usectime() {
 	$t = gettimeofday();
 	return $t['sec'] + ($t['usec'] / 1000000);
@@ -104,6 +103,9 @@ $router->addMatchTypes(['s' => '[0-9A-Za-z\-]+']);
 $routes = spyc_load_file(__DIR__.'/urls.yaml');
 
 // Map our routes
+$route_name=0;
+$params='string';
+
 foreach ($routes as $route_name => $params) {
 	$router->map($params[0], $params[1], $params[2], $route_name);
 }
@@ -113,6 +115,9 @@ require_once(__DIR__.'/pluginsystem.php');
 loadFieldLists();
 require_once(__DIR__.'/loguser.php');
 require_once(__DIR__.'/permissions.php');
+
+/*in questa if la variabile $loguser da dove viene? non è stata inizializzata da nessuna parte*/
+$loguser=FALSE;
 
 if (Settings::get('maintenance') && !$loguser['root'] && $http->get('page') != 'login')
 	die('The board is currently in maintenance mode, please try again later. Our apologies for the inconvenience.');
@@ -135,9 +140,13 @@ require_once(__DIR__.'/layout.php');
 require_once(__DIR__.'/smarty/Smarty.class.php');
 $tpl = new Smarty;
 $tpl->assign('config', ['date' => $loguser['dateformat'], 'time' => $loguser['timeformat']]);
-$tpl->assign('loguserid', $loguserid);
+
+if(isset($loguserid))
+    $tpl->assign('loguserid', $loguserid);
+
 require_once(__DIR__.'/PipeMenuBuilder.php');
 require_once(__DIR__.'/Browserdetection.php');
 
 $bucket = 'init'; include(__DIR__.'/pluginloader.php');
+
 

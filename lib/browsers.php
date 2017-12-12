@@ -73,7 +73,8 @@ $mobileBrowsers = ['Opera Tablet', 'Opera Mobile', 'Opera Mini', 'Nintendo DSi',
 $mobileLayout = false;
 
 $ua = $_SERVER['HTTP_USER_AGENT'];
-
+$code='string';
+$name='string';
 foreach($knownBrowsers as $code => $name) {
 	if (strpos($ua, $code) !== FALSE) {
 		$versionStart = strpos($ua, $code) + strlen($code);
@@ -92,9 +93,12 @@ foreach($knownBrowsers as $code => $name) {
 }
 
 $browserName = $name;
-$browserVers = (float)$version;
+
+if(isset($version))
+    $browserVers = (float)$version;
 
 $os = "";
+
 foreach($knownOSes as $code => $name) {
 	if (strpos($ua, 'X11'))
 		$suffix = '(X11)';
@@ -106,7 +110,8 @@ foreach($knownOSes as $code => $name) {
 		if(strpos($name, '%') !== FALSE) {
 			$versionStart = strpos($ua, $code) + strlen($code);
 			$version = GetVersion($ua, $versionStart);
-			$os = str_replace('%', $version, $os);
+			if(strpos($os,'%')!==FALSE)
+			    $os = str_replace('%', $version, $os);
 		}
 		//If we're using the default Android browser, just report the version of Android being used ~Nina
 		$lkbhax = explode(' ', $lastKnownBrowser);
@@ -149,7 +154,7 @@ function GetVersion($ua, $versionStart) {
 				$version .= $ch;
 			else if(strpos(':/', $ch) !== FALSE)
 				continue;
-			else if(!$numDots) {
+			else if(!isset($numDots)) {
 				preg_match('/\G\w+/', $ua, $matches, 0, $versionStart + 1);
 				return $matches[0];
 			} else

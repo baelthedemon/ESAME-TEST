@@ -16,7 +16,7 @@ function RenderTemplate($template, $options=null) {
 	} else
 		$tplroot = BOARD_ROOT.'/layouts/';
 
-	if ($mobileLayout) {
+	if (isset($mobileLayout)) {
 		$tplname = $tplroot.'mobile/'.$template.'.tpl';
 		if (!file_exists($tplname))
 			$tplname = $tplroot.'wwxd/'.$template.'.tpl';
@@ -105,7 +105,7 @@ function makeForumList($fieldname, $selectedID, $allowNone=false) {
 			continue;
 
 		$cname = $cat['name'];
-		if ($cat['board']) $cname = $forumBoards[$cat['board']].' - '.$cname;
+		if (isset($cat['board'])) $cname = $forumBoards[$cat['board']].' - '.$cname;
 
 		$theList .=
 '			<optgroup label="'.htmlspecialchars($cname).'">
@@ -240,60 +240,52 @@ function sForums($parent, $boardlol='') {
         $loguserid, $f['minl'], $f['maxr']);
     return $sForums;
 }
+
+/*
+ * modifiche fatte da Giosh96 in data 11/12 per risolvere la issue 8757: nell'assegnamento successivo di $fdata['lastpostuser']=.... invece di assegnare direttamente
+ * ad 'avatar' la stringa $user['picture'] con tutte le occorrenze di '$root/' con DATA_URL, bisogna controllare che effettivamente capiti almeno una volta
+ * una occorrenza di '$root/' in $user['picture'], e solo in questo caso effettuare la sostituzione
+ *'avatar' => @str_replace('$root/', DATA_URL, $user['picture']) questo è invece come era prima
+ *
+ * @Da Gabriele: ho spostato questo commento dalla riga 328, per via della issue mia circa le funzioni lunghe
+ */
 function makeForumListing($parent, $boardlol='') {
-
 	global $loguserid, $loguser, $usergroups;
-
     $viewableforums = ForumsWithPermission('forum.viewforum');
     $viewhidden = HasPermission('user.viewhiddenforums');
     $rFora = rForaQuery($parent,$boardlol, $viewableforums, $viewhidden);
-
 	if (!NumRows($rFora)) return;
-
 	$rSubfora = rSubfora($parent,$parent, $boardlol, $viewableforums, $viewhidden);
     $subfora = [];
     $mods = [];
-
 	while ($sf = Fetch($rSubfora)) $subfora[-$sf['catid']][] = $sf;
     $rMods = rMods();
-
 	while($mod = Fetch($rMods)) $mods[$mod['p_arg']][] = $mod['p_applyto'] ? getDataPrefix($mod, 'u_') : ['groupid' => $mod['p_id']];
-
 	$categories = [];
-
 	while($forum = Fetch($rFora)) {
 		$skipThisOne = false;
 		$bucket = 'forumListMangler'; include(__DIR__.'/pluginloader.php');
-
-		if($skipThisOne) continue;
-
+		if($skipThisOne == true) continue;
 		if (!isset($categories[$forum['catid']]))
 			$categories[$forum['catid']] = ['id' => $forum['catid'], 'name' => ($parent==0)?$forum['cname']:'Subforums', 'forums' => []];
-
 		$fdata = ['id' => $forum['id']];
 		$tag = urlencode($forum['title']);
 		$hash = -151;
-
 		for($i = 0; $i < strlen($tag); $i++) $hash += ord($tag[$i]);
-
 		$fdata['color'] = hsl2Hex([(($hash * 777) % 360), 0.5, 0.18]);
-
-		if ($forum['redirect']) {
+		if (isset($forum['redirect'])) {
 			$redir = $forum['redirect'];
-
 			if ($redir[0] == ':') {
 				$redir = explode(':', $redir);
 				$fdata['link'] = actionLinkTag($forum['title'], $redir[1], $redir[2], $redir[3], $redir[4]);
 				$forum['numthreads'] = '-';
 				$forum['numposts'] = '-';
-
 				if ($redir[1] == 'board') {
 					$tboard = $redir[2];
 					$f = Fetch(Query('SELECT MIN(l) minl, MAX(r) maxr FROM {forums} WHERE board={0}', $tboard));
 					$forum['numthreads'] = 0;
 					$forum['numposts'] = 0;
 					$sforums = sForums($parent, $boardlol);
-
 					while ($sforum = Fetch($sforums)) {
 						$forum['numthreads'] += $sforum['numthreads'];
 						$forum['numposts'] += $sforum['numposts'];
@@ -313,64 +305,45 @@ function makeForumListing($parent, $boardlol='') {
 					}
 				}
 			} else $fdata['link'] = '<a href="'.htmlspecialchars($redir).'">'.$forum['title'].'</a>';
-		} else
-			$fdata['link'] = actionLinkTag($forum['title'], 'forum',  $forum['id'], '', HasPermission('forum.viewforum', $forum['id'], true) ? $forum['title'] : '');
-
+		} else $fdata['link'] = actionLinkTag($forum['title'], 'forum',  $forum['id'], '', HasPermission('forum.viewforum', $forum['id'], true) ? $forum['title'] : '');
 		$fdata['ignored'] = $forum['ignored'];
 		$localMods = '';
 		$subforaList = '';
 		$newstuff = $forum['ignored'] ? 0 : $forum['numnew'];
-		if ($newstuff > 0)
-			$fdata['new'] = "<div class=\"statusIcon new\">$newstuff</div>";
-
+		if ($newstuff > 0) $fdata['new'] = "<div class=\"statusIcon new\">$newstuff</div>";
 		$fdata['description'] = $forum['description'];
 		if (isset($mods[$forum['id']])) {
 			foreach($mods[$forum['id']] as $user) {
-				if ($user['groupid']) $localMods .= htmlspecialchars($usergroups[$user['groupid']]['name']).', ';
+				if (isset($user['groupid'])) $localMods .= htmlspecialchars($usergroups[$user['groupid']]['name']).', ';
 				else $localMods .= UserLink($user).', ';
 			}
 		}
-		if($localMods) $fdata['localmods'] = substr($localMods,0,-2);
+		if(isset($localMods)) $fdata['localmods'] = substr($localMods,0,-2);
 		if (isset($subfora[$forum['id']])) {
 			foreach ($subfora[$forum['id']] as $subforum) {
 				$link = actionLinkTag($subforum['title'], 'forum', $subforum['id'], '', HasPermission('forum.viewforum', $subforum['id'], true) ? $subforum['title'] : '');
-				if ($subforum['ignored']) $link = '<span class="ignored">'.$link.'</span>';
+				if (isset($subforum['ignored'])) $link = '<span class="ignored">'.$link.'</span>';
 				else if ($subforum['numnew'] > 0) $link = '<div class="statusIcon new"></div> '.$link;
 				$subforaList .= $link.', ';
 			}
 		}
-		if($subforaList) $fdata['subforums'] = substr($subforaList,0,-2);
+		if(isset($subforaList)) $fdata['subforums'] = substr($subforaList,0,-2);
 		$fdata['threads'] = $forum['numthreads'];
 		$fdata['posts'] = $forum['numposts'];
-		if($forum['lastpostdate']) {
+		if(isset($forum['lastpostdate'])) {
 			$avatar = false;
 			$user = getDataPrefix($forum, 'lu_');
 			$fdata['lastpostdate'] = formatdate($forum['lastpostdate']);
-
-
-// modifiche fatte da Giosh96 in data 11/12 per risolvere la issue 8757: nell'assegnamento successivo di $fdata['lastpostuser']=.... invece di assegnare direttamente
-            // ad 'avatar' la stringa $user['picture'] con tutte le occorrenze di '$root/' con DATA_URL, bisogna controllare che effettivamente capiti almeno una volta
-            // una occorrenza di '$root/' in $user['picture'], e solo in questo caso effettuare la sostituzione
-
-            // 'avatar' => @str_replace('$root/', DATA_URL, $user['picture']) questo è invece come era prima
-
             $pictureUrl= $user['picture'];
-
 			if(strpos($pictureUrl,'$root/')!==FALSE)
                 $pictureUrl=str_replace('$root/', DATA_URL,$pictureUrl);
-
-
-//-----------------------------------------------------------------------
-
 			$fdata['lastpostuser'] = [
 				'name' => $user['displayname'] ? $user['displayname'] : $user['name'], 'link' => UserLink($user),
 				'href' => UserLink($user, false, false, true), 'avatar' => $pictureUrl,
 			];
 			$fdata['lastpostname'] = $forum['lastpostname'];
 			$fdata['lastpostlink'] = actionLink('post', $forum['lastpostid'], false, $forum['lastpostname']);
-
 		} else $fdata['lastpostdate'] = 0;
-
 		$categories[$forum['catid']]['forums'][$forum['id']] = $fdata;
 	}
 RenderTemplate('forumlist1', ['categories' => $categories]);
@@ -398,7 +371,7 @@ function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum 
 		$tdata['gotonew'] = '';
 		$tdata['hasUnread'] = false;
 
-		if($thread['closed'])
+		if(isset($thread['closed']))
 			$NewIcon = 'off';
 		if($thread['replies'] >= $misc['hotcount'])
 			$NewIcon .= 'hot';
@@ -406,14 +379,14 @@ function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum 
 			($loguserid && $thread['lastpostdate'] > $thread['readdate'])) {
 			$NewIcon .= 'new';
 			$tdata['hasUnread'] = true;
-			if ($loguserid) {
+			if (isset($loguserid)) {
 				$tdata['gotonew'] = actionLinkTag('<img src="'.resourceLink('img/gotounread.png').'" alt="[go to first unread post]">',
 					'post', '', 'tid='.$thread['id'].'&time='.(int)$thread['readdate']);
 			}
 		} else if(!$thread['closed'] && !$thread['sticky'] && Settings::get('oldThreadThreshold') > 0 && $thread['lastpostdate'] < time() - (2592000 * Settings::get('oldThreadThreshold')))
 			$NewIcon = 'old';
 
-		if($NewIcon)
+		if(isset($NewIcon))
 			$tdata['new'] = '<div class="statusIcon '.$NewIcon.'"></div>';
 		else
 			$tdata['new'] = '';
@@ -421,7 +394,7 @@ function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum 
 		$tdata['sticky'] = $thread['sticky'];
 		$tdata['closed'] = $thread['closed'];
 
-		if($thread['icon']) {
+		if(isset($thread['icon'])) {
 			//This is a hack, but given how icons are stored in the DB, I can do nothing about it without breaking DB compatibility.
 			if(startsWith($thread['icon'], 'img/'))
 				$thread['icon'] = resourceLink($thread['icon']);
@@ -436,13 +409,13 @@ function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum 
 		$total = $thread['replies'];
 
 		$ppp = $loguser['postsperpage'];
-		if(!$ppp) $ppp = 20;
+		if(!isset($ppp)) $ppp = 20;
 
 		$numpages = floor($total / $ppp);
 		$pl = '';
 		if($numpages <= $n * 2) {
 			for($i = 1; $i <= $numpages; $i++)
-				$pl .= " ".actionLinkTag($i+1, 'thread', $thread['id'], 'from='.($i * $ppp), $urlname);
+				$pl .= ' '.actionLinkTag($i+1, 'thread', $thread['id'], 'from='.($i * $ppp), $urlname);
 		} else {
 			for($i = 1; $i < $n; $i++)
 			$pl .= ' '.actionLinkTag($i+1, 'thread', $thread['id'], 'from='.($i * $ppp), $urlname);
@@ -450,7 +423,7 @@ function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum 
 			for($i = $numpages - $n + 1; $i <= $numpages; $i++)
 				$pl .= ' '.actionLinkTag($i+1, 'thread', $thread['id'], 'from='.($i * $ppp), $urlname);
 		}
-		if($pl)
+		if(isset($pl))
 			$tdata['pagelinks'] = actionLinkTag(1, 'thread', $thread['id'], '', $urlname).$pl;
 		else
 			$tdata['pagelinks'] = '';
@@ -547,29 +520,29 @@ function DoPostHelp() {
 		<tr class=\"cell0\"><td>
 			<button class=\"expander\" id=\"postHelpExpand\" onclick=\"expandPostHelp();\">&#x25BC;</button>
 			<div id=\"commonHelp\" class=\"left\">
-				<h4>".__('Presentation')."</h4>
-				[b]&hellip;[/b] &mdash; <strong>".__('bold type')."</strong> <br />
+				<h4>'.__('Presentation').'</h4>
+				[b]&hellip;[/b] &mdash; <strong>'.__('bold type').'</strong> <br />
 				[i]&hellip;[/i] &mdash; <em>".__('italic')."</em> <br />
-				[u]&hellip;[/u] &mdash; <span class=\"underline\">".__('underlined')."</span> <br />
+				[u]&hellip;[/u] &mdash; <span class=\"underline\">'.__('underlined').'</span> <br />
 				[s]&hellip;[/s] &mdash; <del>".__('strikethroug')."</del><br />
 			</div>
 			<div id=\"expandedHelp\" class=\"left\">
-				[code]&hellip;[/code] &mdash; <code>".__('code block')."</code> <br />
-				[spoiler]&hellip;[/spoiler] &mdash; ".__('spoiler block"')." <br />
+				[code]&hellip;[/code] &mdash; <code>'.__('code block').'</code> <br />
+				[spoiler]&hellip;[/spoiler] &mdash; '.__('spoiler block').' <br />
 				[spoiler=&hellip;]&hellip;[/spoiler] <br />
-				[source]&hellip;[/source] &mdash; ".__('colorcoded block, assuming C#')." <br />
-				[source=&hellip;]&hellip;[/source] &mdash; ".__('colorcoded block, specific language')."<sup title=\"bnf, c, cpp, csharp, html4strict, irc, javascript, lolcode, lua, mysql, php, qbasic, vbnet, xml\">[".__('which?')."]</sup> <br />
+				[source]&hellip;[/source] &mdash; '.__('colorcoded block, assuming C#').' <br />
+				[source=&hellip;]&hellip;[/source] &mdash; '.__('colorcoded block, specific language').'<sup title=\"bnf, c, cpp, csharp, html4strict, irc, javascript, lolcode, lua, mysql, php, qbasic, vbnet, xml\">['.__('which?').']</sup> <br />
 	");
 	$bucket = 'postHelpPresentation'; include('./lib/pluginloader.php');
-	write("
+	write('
 				<br />
-				<h4>".__('Links')."</h4>
-				[img]http://&hellip;[/img] &mdash; ".__('insert image')." <br />
+				<h4>'.__('Links').'</h4>
+				[img]http://&hellip;[/img] &mdash; '.__('insert image').' <br />
 				[url]http://&hellip;[/url] <br />
 				[url=http://&hellip;]&hellip;[/url] <br />
-				>>&hellip; &mdash; ".__('link to post by ID')." <br />
-				[user=##] &mdash; ".__("link to user's profile by ID")." <br />
-	");
+				>>&hellip; &mdash; '.__('link to post by ID').' <br />
+				[user=##] &mdash; '.__("link to users profile by ID").' <br />
+	');
 	$bucket = 'postHelpLinks'; include('./lib/pluginloader.php');
 
 	write('
@@ -580,10 +553,10 @@ function DoPostHelp() {
 				[quote=\"&hellip;\" id=\"&hellip;\"]&hellip;[/quote] &mdash; \"".__("\"Post by &hellip;\" with link by post ID")." <br />
 	');
 	$bucket = "postHelpQuotations"; include("./lib/pluginloader.php");
-	write("
+	write('
 				<br />
-				<h4>".__('Embeds')."</h4>
-	");
+				<h4>'.__('Embeds').'</h4>
+	');
 	$bucket = 'postHelpEmbeds'; include('./lib/pluginloader.php');
 	write('
 			</div>

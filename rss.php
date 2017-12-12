@@ -29,20 +29,28 @@ header('Content-type: application/rss+xml');
 $title = Settings::get('rssTitle');
 $desc = Settings::get('rssDesc');
 
-$url = "http".($ishttps?'s':'')."://{$_SERVER['SERVER_NAME']}{$serverport}";
-$fullurl = getServerURLNoSlash($ishttps);
+if(isset($ishttps) && isset($_SERVER['SERVER_NAME']) && isset($serverport))
+    $url = "http".($ishttps?'s':'')."://{$_SERVER['SERVER_NAME']}{$serverport}";
+
+if(isset($ishttps))
+    $fullurl = getServerURLNoSlash($ishttps);
 
 print '<?xml version="1.0" encoding="UTF-8"?>';
+
 ?>
 
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-	<channel>
-		<title><?php echo htmlspecialchars($title); ?></title>
-		<link><?php echo htmlspecialchars($url); ?></link>
-		<description><?php echo htmlspecialchars($desc); ?></description>
-		<atom:link href="<?php echo htmlspecialchars($fullurl); ?>/rss.php" rel="self" type="application/rss+xml" />
+    <channel>
+        <title><?php  if(isset($title)) echo htmlspecialchars($title); ?></title>
+        <link><?php   if(isset($url)) echo htmlspecialchars($url); ?></link>
+        <description><?php  if(isset($desc)) echo htmlspecialchars($desc); ?></description>
+        <atom:link href="<?php if(isset($fullurl)) echo htmlspecialchars($fullurl); ?>/rss.php" rel="self" type="application/rss+xml" />
+
 
 <?php
+
+    $fid = Settings::get('newsForum');
+
 	$entries = Query("	SELECT 
 							t.id, t.title, 
 							p.date,
@@ -74,8 +82,9 @@ print '<?xml version="1.0" encoding="UTF-8"?>';
 		$text = preg_replace('@<img[^>]+?src\s*=\s*([^\s>]+?)(\s+[^>]*?)?>@si', '<a href="$1">(image)</a>', $text);
 		
 		$text = preg_replace('@([="\'])\?page=@si', '$1'.$fullurl.'/?page=', $text);
-		
-		$text = str_replace(']]>', ']]&gt;', $text);
+
+		if(strpos($text,']]>')!==FALSE)
+		    $text = str_replace(']]>', ']]&gt;', $text);
 		
 		$username = htmlspecialchars($username);
 		

@@ -246,7 +246,7 @@ class Spyc {
 	if (!$no_opening_dashes) $string = "---\n";
 
 	// Start at the base of the array and move through it.
-	if ($array) {
+	if (isset($array)) {
 	  $array = (array)$array;
 	  $previous_key = -1;
 	  foreach ($array as $key => $value) {
@@ -503,7 +503,7 @@ class Spyc {
 	  $this->path = $tempPath;
 
 	  $literalBlockStyle = self::startsLiteralBlock($line);
-	  if ($literalBlockStyle) {
+	  if (isset($literalBlockStyle)) {
 		$line = rtrim ($line, $literalBlockStyle . " \n");
 		$literalBlock = '';
 		$line .= ' '.$this->LiteralPlaceHolder;
@@ -526,7 +526,7 @@ class Spyc {
 
 	  $lineArray = $this->_parseLine($line);
 
-	  if ($literalBlockStyle)
+	  if (isset($literalBlockStyle))
 		$lineArray = $this->revertLiteralPlaceHolder ($lineArray, $literalBlock);
 
 	  $this->addArray($lineArray, $this->indent);
@@ -562,14 +562,14 @@ class Spyc {
 	 * @param string $line A line from the YAML file
 	 */
   private function _parseLine($line) {
-	if (!$line) return [];
+	if (!isset($line)) return [];
 	$line = trim($line);
-	if (!$line) return [];
+	if (!isset($line)) return [];
 
 	$array = [];
 
 	$group = $this->nodeContainsGroup($line);
-	if ($group) {
+	if (isset($group)) {
 	  $this->addGroup($line, $group);
 	  $line = $this->stripGroup ($line, $group);
 	}
@@ -604,20 +604,20 @@ class Spyc {
 
 	$is_quoted = false;
 	do {
-	  if (!$value) break;
+	  if (!isset($value)) break;
 	  if ($first_character != '"' && $first_character != "'") break;
 	  if ($last_character != '"' && $last_character != "'") break;
 	  $is_quoted = true;
 	} while (0);
 
-	if ($is_quoted) {
+	if (isset($is_quoted)) {
 	  $value = str_replace('\n', "\n", $value);
 	  if ($first_character == "'")
 		return strtr(substr ($value, 1, -1), ["\'\'" => "\'", "\\\'"=> "\'"]);
 	  return strtr(substr ($value, 1, -1), ['\\"' => "'", "\\\'"=> "\'"]);
 	}
 
-	if (strpos($value, ' #') !== false && !$is_quoted)
+	if (strpos($value, ' #') !== false && !isset($is_quoted))
 	  $value = preg_replace('/\s+#(.+)$/','',$value);
 
 	if ($first_character == '[' && $last_character == ']') {
@@ -695,11 +695,6 @@ class Spyc {
 	 * @return array
 	 */
   private function _inlineEscape($inline) {
-	// There's gotta be a cleaner way to do this...
-	// While pure sequences seem to be nesting just fine,
-	// pure mappings and mappings with sequences inside can't go very
-	// deep.  This needs to be fixed.
-
 	$seqs = [];
 	$maps = [];
 	$saved_strings = [];
@@ -737,9 +732,7 @@ class Spyc {
 	  $maps[] = $matchmaps[0];
 	  $inline = preg_replace('/{([^\[\]{}]+)}/U', ('YAMLMap' . (count($maps) - 1) . 's'), $inline, 1);
 	}
-
 	if ($i++ >= 10) break;
-
 	} while (strpos ($inline, '[') !== false || strpos ($inline, '{') !== false);
 
 	$explode = explode(',',$inline);
@@ -747,64 +740,7 @@ class Spyc {
 	$stringi = 0; $i = 0;
 
 	while (1) {
-
-	// Re-add the sequences
-	if (!empty($seqs)) {
-	  foreach ($explode as $key => $value) {
-		if (strpos($value,'YAMLSeq') !== false) {
-		  foreach ($seqs as $seqk => $seq) {
-
-		      if(strpos($value,('YAMLSeq'.$seqk.'s'))!==FALSE)
-			        $explode[$key] = str_replace(('YAMLSeq'.$seqk.'s'),$seq,$value);
-
-			$value = $explode[$key];
-		  }
-		}
-	  }
-	}
-
-	// Re-add the mappings
-	if (!empty($maps)) {
-
-	  foreach ($explode as $key => $value) {
-
-		if (strpos($value,'YAMLMap') !== false) {
-
-		  foreach ($maps as $mapk => $map) {
-
-              if(strpos($value,('YAMLMap'.$mapk.'s'))!==FALSE)
-			        $explode[$key] = str_replace(('YAMLMap'.$mapk.'s'), $map, $value);
-
-			$value = $explode[$key];
-		  }
-		}
-	  }
-	}
-
-
-	// Re-add the strings
-	if (!empty($saved_strings)) {
-	  foreach ($explode as $key => $value) {
-		while (strpos($value,'YAMLString') !== false) {
-		  $explode[$key] = preg_replace('/YAMLString/',$saved_strings[$stringi],$value, 1);
-		  unset($saved_strings[$stringi]);
-		  ++$stringi;
-		  $value = $explode[$key];
-		}
-	  }
-	}
-
-
-	// Re-add the empties
-	if (!empty($saved_empties)) {
-	  foreach ($explode as $key => $value) {
-		while (strpos($value,'YAMLEmpty') !== false) {
-		  $explode[$key] = preg_replace('/YAMLEmpty/', '', $value, 1);
-		  $value = $explode[$key];
-		}
-	  }
-	}
-
+	$explode = readdThings($seqs, $explode);
 	$finished = true;
 	foreach ($explode as $key => $value) {
 	  if (strpos($value,'YAMLSeq') !== false) {
@@ -820,7 +756,7 @@ class Spyc {
 		$finished = false; break;
 	  }
 	}
-	if ($finished) break;
+	if (isset($finished)) break;
 
 	$i++;
 	if ($i > 10)
@@ -829,6 +765,60 @@ class Spyc {
 
 
 	return $explode;
+  }
+
+  function readdThings($seqs, $explode) {
+      // Re-add the sequences
+      if (!empty($seqs)) {
+          foreach ($explode as $key => $value) {
+              if (strpos($value,'YAMLSeq') !== false) {
+                  foreach ($seqs as $seqk => $seq) {
+
+                      if(strpos($value,('YAMLSeq'.$seqk.'s'))!==FALSE)
+                          $explode[$key] = str_replace(('YAMLSeq'.$seqk.'s'),$seq,$value);
+                      $value = $explode[$key];
+                  }
+              }
+          }
+      }
+
+      // Re-add the mappings
+      if (!empty($maps)) {
+          foreach ($explode as $key => $value) {
+              if (strpos($value,'YAMLMap') !== false) {
+                  foreach ($maps as $mapk => $map) {
+                      if(strpos($value,('YAMLMap'.$mapk.'s'))!==FALSE)
+                          $explode[$key] = str_replace(('YAMLMap'.$mapk.'s'), $map, $value);
+                      $value = $explode[$key];
+                  }
+              }
+          }
+      }
+
+
+      // Re-add the strings
+      if (!empty($saved_strings)) {
+          foreach ($explode as $key => $value) {
+              while (strpos($value,'YAMLString') !== false) {
+                  $explode[$key] = preg_replace('/YAMLString/',$saved_strings[$stringi],$value, 1);
+                  unset($saved_strings[$stringi]);
+                  ++$stringi;
+                  $value = $explode[$key];
+              }
+          }
+      }
+
+
+      // Re-add the empties
+      if (!empty($saved_empties)) {
+          foreach ($explode as $key => $value) {
+              while (strpos($value,'YAMLEmpty') !== false) {
+                  $explode[$key] = preg_replace('/YAMLEmpty/', '', $value, 1);
+                  $value = $explode[$key];
+              }
+          }
+      }
+      return $explode;
   }
 
   private function literalBlockContinues ($line, $lineIndent) {
@@ -1013,7 +1003,7 @@ class Spyc {
 
 
   private static function isComment ($line) {
-	if (!$line) return false;
+	if (!isset($line)) return false;
 	if ($line[0] == '#') return true;
 	if (trim($line, " \r\n\t") == '---') return true;
 	return false;
@@ -1025,7 +1015,7 @@ class Spyc {
 
 
   private function isArrayElement ($line) {
-	if (!$line || !is_scalar($line)) return false;
+	if (!isset($line )|| !is_scalar($line)) return false;
 	if (substr($line, 0, 2) != '- ') return false;
 	if (strlen ($line) > 3)
 	  if (substr($line,0,3) == '---') return false;
@@ -1045,7 +1035,7 @@ class Spyc {
 
 
   private static function unquote ($value) {
-	if (!$value) return $value;
+	if (!isset($value)) return $value;
 	if (!is_string($value)) return $value;
 	if ($value[0] == "\'") return trim ($value, "\'");
 	if ($value[0] == '"') return trim ($value, '"');

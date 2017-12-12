@@ -21,7 +21,7 @@ function ParseThreadTags($title) {
 
 		$tags .= '<span class=\"threadTag\" style=\"background-color: '.$color.';\">'.$tag.'</span>';
 	}
-	if($tags)
+	if(isset($tags))
 		$tags = ' '.$tags;
 
 	$title = str_replace('<', '&lt;', $title);
@@ -105,14 +105,14 @@ function makePostText($post, $poster) {
 	];
 	$bucket = 'amperTags'; include(__DIR__.'/pluginloader.php');
 
-	if($poster['signature'])
+	if(isset($poster['signature']))
 		if(!$poster['signsep'])
 			$separator = '<br/>_________________________<br/>';
 		else
 			$separator = '<br/>';
 
 	$attachblock = '';
-	if ($post['has_attachments']){
+	if (isset($post['has_attachments'])){
 		if (isset($post['preview_attachs'])) {
 			$ispreview = true;
 			$fileids = array_keys($post['preview_attachs']);
@@ -145,7 +145,7 @@ function makePostText($post, $poster) {
 				$link = '<a href="'.$linkurl.'">'.htmlspecialchars($attach['filename']).'</a>';
 
 				$desc = htmlspecialchars($attach['description']);
-				if ($desc) $desc .= '<br/>';
+				if (isset($desc)) $desc .= '<br/>';
 
 				$attachblock .= '<strong>'.__('Attachment: ').$link.'</strong><br/>';
 				$attachblock .= '<div class="smallFonts">'.$desc;
@@ -178,59 +178,43 @@ define('POST_PROFILE', 4);		  // profile about box. This is going to replace the
 //		* noreplylinks: if set, no links to newreply.php (Quote/ID) are placed in the metabar (POST_NORMAL only)
 function makePost($post, $type, $params=[]) {
 	global $loguser, $loguserid, $usergroups, $isBot, $blocklayouts;
-
 	$poster = getDataPrefix($post, 'u_');
 	$post['userlink'] = UserLink($poster);
-
 	LoadBlockLayouts();
 	$pltype = Settings::get('postLayoutType');
 	$isBlocked = $poster['globalblock'] || $loguser['blocklayouts'] || $post['options'] & 1 || isset($blocklayouts[$poster['id']]);
-
 	$post['type'] = $type;
 	$post['formattedDate'] = formatdate($post['date']);
-
-	if (!HasPermission('admin.viewips'))
-		$post['ip'] = '';
-	else
-		$post['ip'] = htmlspecialchars($post['ip']); // TODO IP formatting?
+	if (!HasPermission('admin.viewips')) $post['ip'] = '';
+	else $post['ip'] = htmlspecialchars($post['ip']); // TODO IP formatting?
 
 	if($post['deleted'] && $type == POST_NORMAL) {
 		$post['deluserlink'] = UserLink(getDataPrefix($post, 'du_'));
 		$post['delreason'] = htmlspecialchars($post['reason']);
-
 		$links = [];
-		if (HasPermission('mod.deleteposts', $params['fid'])) {
+		if (HasPermission('mod.deleteposts', $params['fid']))
 			$links['undelete'] = actionLinkTag(__('Undelete'), 'editpost', $post['id'], 'delete=2&key='.$loguser['token']);
-		}
-
-		if (HasPermission('mod.deleteposts', $params['fid']) || $poster['id'] == $loguserid) {
+		if (HasPermission('mod.deleteposts', $params['fid']) || $poster['id'] == $loguserid)
 			$links['view'] = '<a href=\"#\" onclick=\"replacePost('.$post['id'].',true); return false;\">'.__('View').'</a>';
-		}
-
 		$post['links'] = $links;
-
 		RenderTemplate('postbox_deleted', ['post' => $post]);
 		return;
 	}
-
 	$links = [];
-
 	if ($type != POST_SAMPLE || $type != POST_PROFILE) {
 		$forum = $params['fid'];
 		$thread = $params['tid'];
-
 		$notclosed = (!$post['closed'] || HasPermission('mod.closethreads', $forum));
-
 		$extraLinks = [];
 
-		if (!$isBot) {
+		if (!isset($isBot)) {
 			if ($type == POST_DELETED_SNOOP) {
 				if ($notclosed && HasPermission('mod.deleteposts', $forum))
 					$links['undelete'] = actionLinkTag(__('Undelete'), 'editpost', $post['id'], 'delete=2&key='.$loguser['token']);
 
 				$links['close'] = '<a href=\"#\" onclick=\"replacePost('.$post['id'].',false); return false;\">'.__('Close').'</a>';
 			} else if ($type == POST_NORMAL) {
-				if ($notclosed) {
+				if (isset($notclosed)) {
 					if ($loguserid && HasPermission('forum.postreplies', $forum) && !$params['noreplylinks'])
 						$links['quote'] = actionLinkTag(__('Quote'), 'newreply', $thread, 'quote='.$post['id']);
 
@@ -244,120 +228,106 @@ function makePost($post, $type, $params=[]) {
 							$links['delete'] = '<a href=\"{$link}\"{$onclick}>'.__('Delete').'</a>';
 						}
 					}
-
 					if (HasPermission('mod.deleteposts', $forum) && $post['id'] != $post['firstpostid']) {
 							$link = htmlspecialchars(actionLink('editpost', $post['id'], 'delete=3&key='.$loguser['token']));
 							$onclick = 
 								' onclick= if(!confirm(\'Really wipe this post? This action can\'t be undone\'))return false;';
 							$links['delete'] = '<a href=\"{$link}\"{$onclick}>'.__('Wipe').'</a>';
 					}
-
 					if (HasPermission('user.reportposts'))
 						$links['report'] = actionLinkTag(__('Report'), 'reportpost', $post['id']);
 				}
-
-				// plugins should add to $extraLinks
-				$bucket = 'topbar'; include(__DIR__.'/pluginloader.php');
+                $bucket = 'topbar'; include(__DIR__.'/pluginloader.php');
 			}
-
 			$links['extra'] = $extraLinks;
 		}
-
 		//Threadlinks for listpost.php
-		if ($params['threadlink']) {
+		if (isset($params['threadlink'])) {
 			$thread = [];
 			$thread['id'] = $post['thread'];
 			$thread['title'] = $post['threadname'];
 			$thread['forum'] = $post['fid'];
-
 			$post['threadlink'] = makeThreadLink($thread);
 		} else
 			$post['threadlink'] = '';
 
-		//Revisions
-		if($post['revision']) {
-			$ru_link = UserLink(getDataPrefix($post, 'ru_'));
-			$revdetail = ' '.format(__('by {0} on {1}'), $ru_link, formatdate($post['revdate']));
-
-			if (HasPermission('mod.editposts', $forum))
-				$post['revdetail'] = '<a href=\"javascript:void(0);\" onclick=\"showRevisions('.$post['id'].')\">'.Format(__('rev. {0}'), $post['revision']).'</a>'.$revdetail;
-			else
-				$post['revdetail'] = Format(__('rev. {0}'), $post['revision']).$revdetail;
-		}
-		//</revisions>
+		$post = printRevisions($post, $forum);
 	}
-
 	$post['links'] = $links;
-
-
-	// POST SIDEBAR
-
-	$sidebar = [];
-
-	// quit abusing custom syndromes.
-	$poster['title'] = preg_replace('@Affected by \'?.*?Syndrome\'?@si', '', $poster['title']);
-
+    $sidebar = [];
+    $poster['title'] = preg_replace('@Affected by \'?.*?Syndrome\'?@si', '', $poster['title']);
 	$sidebar['rank'] = GetRank($poster['rankset'], $poster['posts']);
-
-	if($poster['title'])
+	if(isset($poster['title']))
 		$sidebar['title'] = strip_tags(CleanUpPost($poster['title'], '', true), '<b><strong><i><em><span><s><del><img><a><br/><br><small>');
 	else
 		$sidebar['title'] = htmlspecialchars($usergroups[$poster['primarygroup']]['title']);
-
 	$sidebar['syndrome'] = GetSyndrome(getActivity($poster['id']));
-
-	if($post['mood'] > 0) {
-		if(file_exists(DATA_DIR.'avatars/'.$poster['id'].'_'.$post['mood']))
-			$sidebar['avatar'] = '<img src=\"'.DATA_URL.'avatars/'.$poster['id'].'_'.$post['mood']."\" alt=\"\">";
-	} else if ($poster['picture']) {
-		$pic = str_replace('$root/', DATA_URL, $poster['picture']);
-		$sidebar['avatar'] = "<img src=\"".htmlspecialchars($pic)."\" alt=\"\">";
-	}
-
-	$lastpost = ($poster['lastposttime'] ? timeunits(time() - $poster['lastposttime']) : 'none');
-	$lastview = timeunits(time() - $poster['lastactivity']);
-
-	if(!$post['num'])
-		$sidebar['posts'] = $poster['posts'];
-	else
-		$sidebar['posts'] = $post['num'].'/'.$poster['posts'];
-
-	$sidebar['since'] = cdate($loguser['dateformat'], $poster['regdate']);
-
-	$sidebar['lastpost'] = $lastpost;
-	$sidebar['lastview'] = $lastview;
-	$sidebar['posterID'] = $poster['id'];
-
-	if($poster['lastactivity'] > time() - 300)
-		$sidebar['isonline'] = __('User is <strong>online</strong>');
-
-	$sidebarExtra = [];
-	$bucket = 'sidebar'; include(__DIR__.'/pluginloader.php');
-	$sidebar['extra'] = $sidebarExtra;
-
-	$post['sidebar'] = $sidebar;
-
-	// OTHER STUFF
-
-	$post['haslayout'] = false;
-	$post['fulllayout'] = false;
-
-	if(!$isBlocked) {
-		$poster['postheader'] = $pltype ? trim($poster['postheader']) : '';
-		$poster['signature'] = trim($poster['signature']);
-
-		$post['haslayout'] = $poster['postheader']?1:0;
-		$post['fulllayout'] = $poster['fulllayout'] && $post['haslayout'] && ($pltype==2);
-
-		if (!$post['haslayout'] && $poster['signature'])
-			$poster['signature'] = '<div class="signature">'.$poster['signature'].'</div>';
+	$array = managePostMood($post, $sidebar, $poster);
+    $post = $array[0]; $sidebar = $array[1]; $pic = $array[2];
+    $array = modificaVars($poster, $post, $loguser);
+    $sidebar= $array[0]; $post = $array[0]; $bucket = $array[1];
+	if(!isset($isBlocked)) {
+        funIsBlocked($poster, $pltype);
 	} else {
 		$poster['postheader'] = '';
 		$poster['signature'] = '';
 	}
-
 	$post['contents'] = makePostText($post, $poster);
+    RenderTemplate('postbox', ['post' => $post]);
+}
 
-	//PRINT THE POST!
-	RenderTemplate('postbox', ['post' => $post]);
+function funIsBlocked($poster, $pltype) {
+    $poster['postheader'] = $pltype ? trim($poster['postheader']) : '';
+    $poster['signature'] = trim($poster['signature']);
+    $post['haslayout'] = $poster['postheader']?1:0;
+    $post['fulllayout'] = $poster['fulllayout'] && $post['haslayout'] && ($pltype==2);
+    if (!$post['haslayout'] && $poster['signature'])
+        $poster['signature'] = '<div class="signature">'.$poster['signature'].'</div>';
+    return $post;
+}
+function printRevisions($post,$forum) {
+    if(isset($post['revision'])) {
+        $ru_link = UserLink(getDataPrefix($post, 'ru_'));
+        $revdetail = ' '.format(__('by {0} on {1}'), $ru_link, formatdate($post['revdate']));
+        if (HasPermission('mod.editposts', $forum))
+            $post['revdetail'] = '<a href=\"javascript:void(0);\" onclick=\"showRevisions('.$post['id'].')\">'.Format(__('rev. {0}'), $post['revision']).'</a>'.$revdetail;
+        else
+            $post['revdetail'] = Format(__('rev. {0}'), $post['revision']).$revdetail;
+    }
+
+    return $post;
+}
+
+function managePostMood($post, $sidebar, $poster) {
+    if($post['mood'] > 0) {
+        if(file_exists(DATA_DIR.'avatars/'.$poster['id'].'_'.$post['mood']))
+            $sidebar['avatar'] = '<img src=\"'.DATA_URL.'avatars/'.$poster['id'].'_'.$post['mood']."\" alt=\"\">";
+    } else if (isset($poster['picture'])) {
+        $pic = str_replace('$root/', DATA_URL, $poster['picture']);
+        $sidebar['avatar'] = "<img src=\"".htmlspecialchars($pic)."\" alt=\"\">";
+    }
+
+    return array( $post, $sidebar, $pic);
+}
+
+function modificaVars($poster, $post, $loguser){
+    $lastpost = ($poster['lastposttime'] ? timeunits(time() - $poster['lastposttime']) : 'none');
+	$lastview = timeunits(time() - $poster['lastactivity']);
+	if(!$post['num']) $sidebar['posts'] = $poster['posts'];
+    else $sidebar['posts'] = $post['num'].'/'.$poster['posts'];
+	$sidebar['since'] = cdate($loguser['dateformat'], $poster['regdate']);
+	$sidebar['lastpost'] = $lastpost;
+	$sidebar['lastview'] = $lastview;
+	$sidebar['posterID'] = $poster['id'];
+	if($poster['lastactivity'] > time() - 300)
+        $sidebar['isonline'] = __('User is <strong>online</strong>');
+	$sidebarExtra = [];
+	$bucket = 'sidebar'; include(__DIR__.'/pluginloader.php');
+	$sidebar['extra'] = $sidebarExtra;
+	$post['sidebar'] = $sidebar;
+	$post['haslayout'] = false;
+	$post['fulllayout'] = false;
+
+	return array($sidebar, $post, $bucket);
+
 }
