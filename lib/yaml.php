@@ -701,7 +701,7 @@ class Spyc {
 	$saved_empties = [];
 
 	// Check for empty strings
-	$regex = '/("")|(\'\')/';
+	$regex = "/(\"\")|(\'\')/";
 	if (preg_match_all($regex,$inline,$strings)) {
 	  $saved_empties = $strings[0];
 	  $inline  = preg_replace($regex,'YAMLEmpty',$inline);

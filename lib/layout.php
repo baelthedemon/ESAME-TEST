@@ -541,7 +541,7 @@ function DoPostHelp() {
 				[url]http://&hellip;[/url] <br />
 				[url=http://&hellip;]&hellip;[/url] <br />
 				>>&hellip; &mdash; '.__('link to post by ID').' <br />
-				[user=##] &mdash; '.__("link to users profile by ID").' <br />
+				[user=##] &mdash; '.__('link to users profile by ID').' <br />
 	');
 	$bucket = 'postHelpLinks'; include('./lib/pluginloader.php');
 
@@ -552,7 +552,7 @@ function DoPostHelp() {
 				[quote=&hellip;]&hellip;[/quote] &mdash; ".__("\"Posted by &hellip;\"")." <br />
 				[quote=\"&hellip;\" id=\"&hellip;\"]&hellip;[/quote] &mdash; \"".__("\"Post by &hellip;\" with link by post ID")." <br />
 	');
-	$bucket = "postHelpQuotations"; include("./lib/pluginloader.php");
+	$bucket = 'postHelpQuotations'; include('./lib/pluginloader.php');
 	write('
 				<br />
 				<h4>'.__('Embeds').'</h4>
