@@ -509,7 +509,7 @@ function DoSmileyBar($smiliesOrdered, $taname = 'text') {
 	    $i = 0;
 	        foreach($smiliesOrdered as $s) {
 		    if($i == $expandAt)
-			print "</div><div class=\"smilies\" id=\"expandedSet\">";
+			//print "</div><div class=\"smilies\" id=\"expandedSet\">";
 
 
 	    	$code=$s['code'];

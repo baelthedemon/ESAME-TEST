@@ -70,7 +70,7 @@ function QueryURL($url) {
 }
 
 
-function format() {
+function format($arg = []) {
 	$argc = func_num_args();
 	if($argc == 1)
 		return func_get_arg(0);

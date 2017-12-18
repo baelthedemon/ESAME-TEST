@@ -988,7 +988,7 @@ class Spyc {
   }
 
 
-  private function clearBiggerPathValues ($indent) {
+ /* private function clearBiggerPathValues ($indent) {
 
 
 	if ($indent == 0) $this->path = [];
@@ -999,7 +999,7 @@ class Spyc {
 	}
 
 	return true;
-  }
+  }*/
 
 
   private static function isComment ($line) {
@@ -1027,20 +1027,20 @@ class Spyc {
 	return strpos($line, ':');
   }
 
-  private function isLiteral ($line) {
+ /* private function isLiteral ($line) {
 	if ($this->isArrayElement($line)) return false;
 	if ($this->isHashElement($line)) return false;
 	return true;
-  }
+  }*/
 
 
-  private static function unquote ($value) {
+  /*private static function unquote ($value) {
 	if (!isset($value)) return $value;
 	if (!is_string($value)) return $value;
 	if ($value[0] == "\'") return trim ($value, "\'");
 	if ($value[0] == '"') return trim ($value, '"');
 	return $value;
-  }
+  }*/
 
   private function startsMappedSequence ($line) {
 	return (substr($line, 0, 2) == '- ' && substr ($line, -1, 1) == ':');
