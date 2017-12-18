@@ -15,13 +15,13 @@ require(__DIR__ . '/lib/common.php');
 
 $fid = Settings::get('newsForum');
 if(!HasPermission('forum.viewforum', $fid))
-	die("You aren't allowed to access this forum.");
+	trigger_error("You aren't allowed to access this forum.");
 
 $rFora = Query('select * from {forums} where id = {0}',$fid);
 if(NumRows($rFora))
 	$forum = Fetch($rFora);
 else
-	die('Unknown forum ID.');
+	trigger_error('Unknown forum ID.');
 
 
 header('Content-type: application/rss+xml');
@@ -29,8 +29,18 @@ header('Content-type: application/rss+xml');
 $title = Settings::get('rssTitle');
 $desc = Settings::get('rssDesc');
 
-if(isset($ishttps) && isset($_SERVER['SERVER_NAME']) && isset($serverport))
+if(isset($_SERVER['SERVER_PORT'])){
+    $ishttps = ($_SERVER['SERVER_PORT'] == 443);
+    $serverport = ($_SERVER['SERVER_PORT'] == ($ishttps?443:80)) ? '' : ':'.$_SERVER['SERVER_PORT'];
+    if(isset($_SERVER['SERVER_NAME']))
+      $url = 'http'.($ishttps?'s':'')."://{$_SERVER['SERVER_NAME']}{$serverport}";
+}
+
+
+/*if(isset($ishttps) && isset($_SERVER['SERVER_NAME']) && isset($serverport))
     $url = 'http'.($ishttps?'s':'').'://{$_SERVER['SERVER_NAME']}{$serverport}';
+    in questo modo non riconosce la stringa SERVER_NAME, vanno mantenute le doppie quote
+*/
 
 if(isset($ishttps))
     $fullurl = getServerURLNoSlash($ishttps);

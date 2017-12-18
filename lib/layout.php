@@ -1,12 +1,17 @@
 <?php
-if (!defined('BLARG')) die();
+if (!defined('BLARG')) trigger_error();
 
 // ----------------------------------------------------------------------------
 // --- General layout functions
 // ----------------------------------------------------------------------------
 
-function RenderTemplate($template, $options=null) {
-	global $tpl, $mobileLayout, $plugintemplates, $plugins;
+function RenderTemplate($template,$tpl, $mobileLayout=true, $options=null) {
+
+    $plugintemplates=[];
+    $plugins=[];
+    //$mobilelayout e tpl come parametro
+
+	//global $tpl, $mobileLayout, $plugintemplates, $plugins;
 
 	if (array_key_exists($template, $plugintemplates)) {
 		$plugin = $plugintemplates[$template];
@@ -36,7 +41,8 @@ function RenderTemplate($template, $options=null) {
 }
 
 function makeCrumbs($path, $links='') {
-	global $layout_crumbs, $layout_actionlinks;
+    $layout_crumbs = '';
+    $layout_actionlinks = '';
 
 	if(count($path) != 0) {
 		$pathPrefix = [actionLink(0) => Settings::get('breadcrumbsMainName')];
@@ -51,11 +57,13 @@ function makeCrumbs($path, $links='') {
 }
 
 function makeBreadcrumbs($path) {
-	global $layout_crumbs;
+    $layout_crumbs='';
 	$path->addStart(new PipeMenuLinkEntry(Settings::get('breadcrumbsMainName'), 'board'));
 	$path->setClass('breadcrumbs');
 	$bucket = 'breadcrumbs'; include('lib/pluginloader.php');
 	$layout_crumbs = $path;
+
+	return $layout_crumbs;
 }
 
 function mfl_forumBlock($fora, $catid, $selID, $indent) {
@@ -74,8 +82,8 @@ function mfl_forumBlock($fora, $catid, $selID, $indent) {
 	return $ret;
 }
 
-function makeForumList($fieldname, $selectedID, $allowNone=false) {
-	global $loguserid, $loguser, $forumBoards;
+function makeForumList($fieldname, $selectedID,$forumBoards, $allowNone=false) {
+
 
 	$viewableforums = ForumsWithPermission('forum.viewforum');
 	$viewhidden = HasPermission('user.viewhiddenforums');
@@ -117,8 +125,8 @@ function makeForumList($fieldname, $selectedID, $allowNone=false) {
 	return "<select id=\"$fieldname\" name=\"$fieldname\">$noneOption$theList</select>";
 }
 
-function forumCrumbs($forum) {
-	global $forumBoards;
+function forumCrumbs($forum, $forumBoards) {
+
 	$ret = [actionLink('board') => __('Forums')];
 
 	if ($forum['board'] != '')
@@ -146,7 +154,7 @@ function makeForumCrumbs($crumbs, $forum) {
 }
 
 function doThreadPreview($tid, $maxdate=0) {
-	global $loguser;
+    $loguser = Fetch(Query('SELECT * FROM {users} WHERE id={0}', $session['user']));
     $try = ".($maxdate?\' AND {posts}.date<={1}':'').";
 	$review = [];
 	$ppp = $loguser['postsperpage'] ?: 20;
@@ -178,8 +186,8 @@ function doThreadPreview($tid, $maxdate=0) {
 
 	RenderTemplate('threadreview', ['review' => $review]);
 }
-function rForaQuery($parent, $boardlol='', $viewableforums, $viewhidden ) {
-    global $loguserid, $loguser, $usergroups;
+function rForaQuery($parent, $viewableforums, $viewhidden, $loguserid, $boardlol='' ) {
+
     $rFora = Query('	SELECT f.*,
 							c.name cname,
 							'.($loguserid ? '(NOT ISNULL(i.fid))' : '0').' ignored,
@@ -196,8 +204,8 @@ function rForaQuery($parent, $boardlol='', $viewableforums, $viewhidden ) {
     return $rFora;
 }
 
-function rSubfora($parent, $boardlol='', $viewableforums, $viewhidden) {
-    global $loguserid, $loguser, $usergroups;
+function rSubfora($parent, $viewableforums, $viewhidden,$loguserid, $boardlol='') {
+
     $f = Fetch(Query('SELECT MIN(l) minl, MAX(r) maxr FROM {forums} WHERE '.($parent==0 ? 'board={0}' : 'catid={1}'), $boardlol, -$parent));
     $rSubfora = Query('	SELECT f.*,
 							'.($loguserid ? '(NOT ISNULL(i.fid))' : '0').' ignored,
@@ -225,8 +233,8 @@ function rMods($parent, $boardlol) {
         'mod.');
     return $rMods;
 }
-function sForums($parent, $boardlol='') {
-    global $loguserid, $loguser, $usergroups;
+function sForums($parent,$loguserid, $boardlol='') {
+
     $f = Fetch(Query('SELECT MIN(l) minl, MAX(r) maxr FROM {forums} WHERE '.($parent==0 ? 'board={0}' : 'catid={1}'), $boardlol, -$parent));
     $sForums = Query('	SELECT f.id, f.numthreads, f.numposts, f.lastpostid, f.lastpostname, f.lastpostuser, f.lastpostdate,
 											'.($loguserid ? '(NOT ISNULL(i.fid))' : '0').' ignored,
@@ -249,13 +257,13 @@ function sForums($parent, $boardlol='') {
  *
  * @Da Gabriele: ho spostato questo commento dalla riga 328, per via della issue mia circa le funzioni lunghe
  */
-function makeForumListing($parent, $boardlol='') {
-	global $loguserid, $loguser, $usergroups;
+function makeForumListing($parent, $usergroups, $boardlol='') {
+
     $viewableforums = ForumsWithPermission('forum.viewforum');
     $viewhidden = HasPermission('user.viewhiddenforums');
-    $rFora = rForaQuery($parent,$boardlol, $viewableforums, $viewhidden);
+    $rFora = rForaQuery($parent, $viewableforums, $viewhidden,$boardlol);
 	if (!NumRows($rFora)) return;
-	$rSubfora = rSubfora($parent,$parent, $boardlol, $viewableforums, $viewhidden);
+	$rSubfora = rSubfora($parent,$parent, $viewableforums, $viewhidden, $boardlol);
     $subfora = [];
     $mods = [];
 	while ($sf = Fetch($rSubfora)) $subfora[-$sf['catid']][] = $sf;
@@ -350,8 +358,7 @@ RenderTemplate('forumlist1', ['categories' => $categories]);
 }
 
 
-function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum = false) {
-	global $loguserid, $loguser, $misc;
+function makeThreadListing($threads, $pagelinks,$loguserid, $loguser, $misc, $dostickies = true, $showforum = false) {
 
 	$threadlist = [];
 	while ($thread = Fetch($threads)) {
@@ -446,8 +453,8 @@ function makeThreadListing($threads, $pagelinks, $dostickies = true, $showforum 
 	RenderTemplate('threadlist', ['threads' => $threadlist, 'pagelinks' => $pagelinks, 'dostickies' => $dostickies, 'showforum' => $showforum]);
 }
 
-function makeAnncBar() {
-	global $loguserid;
+function makeAnncBar($loguserid) {
+
 
 	$anncforum = Settings::get('anncForum');
 	if ($anncforum > 0) {
@@ -484,8 +491,8 @@ function makeAnncBar() {
 	}
 }
 
-function DoSmileyBar($taname = 'text') {
-	global $smiliesOrdered;
+function DoSmileyBar($smiliesOrdered, $taname = 'text') {
+
 	$expandAt = 100;
 	LoadSmiliesOrdered();
 	print '<table class="message margin">

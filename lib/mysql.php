@@ -1,22 +1,30 @@
 <?php
 // AcmlmBoard XD support - MySQL database wrapper functions
-if (!defined('BLARG')) die();
+if (!defined('BLARG')) trigger_error();
 
 include(__DIR__.'/../config/database.php');
 
 $queries = 0;
 
-if(isset($dbserv) && isset($dbuser) && isset($dbpass) && isset($dbname))
-    $dblink = new mysqli($dbserv, $dbuser, $dbpass, $dbname);
 
-unset($dbpass);
+                if(isset($dbserv)){
+                    if(isset($dbuser)){
+                        if(isset($dbpass)){
+                            if(isset($dbname))
+                                $dblink = new mysqli($dbserv, $dbuser, $dbpass, $dbname);
 
-$dblink->set_charset('utf8');
+                            unset($dbpass);
 
-mysqli_query($dblink, 'SET SESSION sql_mode = "MYSQL40"');
+                            $dblink->set_charset('utf8');
 
-function SqlEscape($text) {
-	global $dblink;
+                            mysqli_query($dblink, 'SET SESSION sql_mode = "MYSQL40"');
+                        }
+                    }
+                }
+
+
+function SqlEscape($text, $dblink) {
+
 	return $dblink->real_escape_string($text);
 }
 
@@ -31,8 +39,8 @@ function Query_ExpandFieldLists($match) {
 	return implode(',', $ret);
 }
 
-function Query_AddUserInput($match) {
-	global $args;
+function Query_AddUserInput($match, $args) {
+
 	$match = $match[1];
 	$format = 's';
 	if(preg_match("/^\d+\D$/", $match)) {
@@ -73,8 +81,8 @@ function Query_AddUserInput($match) {
  *
  */
  
-function Query_MangleTables($match) {
-	global $dbpref, $tableLists;
+function Query_MangleTables($match, $dbpref, $tableLists) {
+
 	$tablename = $match[1];
 	if(isset($tableLists[$tablename]))
 		return $tableLists[$tablename];
@@ -83,8 +91,8 @@ function Query_MangleTables($match) {
 }
 
 
-function query() {
-	global $dbpref, $args, $fieldLists;
+function query($args, $fieldLists) {
+
 	$args = func_get_args();
 	if (is_array($args[0])) $args = $args[0];
 
@@ -107,8 +115,8 @@ function query() {
 $tableLists = [
 ];
 
-function rawQuery($query) {
-	global $queries, $querytext, $loguser, $dblink, $debugMode, $logSqlErrors, $dbpref, $loguserid, $mysqlCellClass;
+function rawQuery($query, $queries, $querytext,$dblink, $debugMode, $logSqlErrors, $dbpref, $loguserid, $mysqlCellClass) {
+
 
 //	if($debugMode)
 //		$queryStart = usectime();
@@ -135,12 +143,12 @@ function rawQuery($query) {
 			$bt = '';
 			if(function_exists('backTrace'))
 				$bt = backTrace();
-			die(nl2br($bt).
+			trigger_error(nl2br($bt).
 				'<br /><br />'.htmlspecialchars($theError).
 				'<br /><br />Query was: <code>'.htmlspecialchars($query).'</code>');
 		} else
 				trigger_error('MySQL Error.', E_USER_ERROR);
-		die('MySQL Error.');
+		trigger_error('MySQL Error.');
 	}
 
 	$queries++;
@@ -181,13 +189,13 @@ function numRows($result) {
 	return $result->num_rows;
 }
 
-function insertId() {
-	global $dblink;
+function insertId($dblink) {
+
 	return $dblink->insert_id;
 }
 
-function affectedRows() {
-	global $dblink;
+function affectedRows($dblink) {
+
 	return $dblink->affected_rows;
 }
 
@@ -207,8 +215,6 @@ $fieldLists = [
 ];
 
 function loadFieldLists() {
-	global $fieldLists, $tableLists;
-
 	//Allow plugins to add their own!
 	$bucket = 'fieldLists';
 	include(__DIR__.'/pluginloader.php');
