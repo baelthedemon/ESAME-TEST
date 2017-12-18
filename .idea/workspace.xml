@@ -50,16 +50,16 @@
       <file leaf-file-name="upload.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/upload.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="39" column="53" lean-forward="true" selection-start-line="39" selection-start-column="53" selection-end-line="39" selection-end-column="53" />
+            <state relative-caret-position="406">
+              <caret line="43" column="12" lean-forward="false" selection-start-line="43" selection-start-column="12" selection-end-line="43" selection-end-column="12" />
               <folding>
-                <marker date="1513601659007" expanded="true" signature="545:728" ph="INSERT INTO " />
-                <marker date="1513601659007" expanded="true" signature="1656:1745" ph="SELECT physi... uploadedfiles" />
-                <marker date="1513601659007" expanded="true" signature="1988:2048" ph="DELETE FROM " />
-                <marker date="1513601659007" expanded="true" signature="2440:2499" ph="SELECT physi... uploadedfiles" />
-                <marker date="1513601659007" expanded="true" signature="2596:2636" ph="DELETE FROM " />
-                <marker date="1513601659007" expanded="true" signature="2692:2755" ph="UPDATE {uplo... " />
-                <marker date="1513601659007" expanded="true" signature="2814:2863" ph="SELECT filen... uploadedfiles" />
+                <marker date="1513602325676" expanded="true" signature="545:728" ph="INSERT INTO " />
+                <marker date="1513602325676" expanded="true" signature="1649:1738" ph="SELECT physi... uploadedfiles" />
+                <marker date="1513602325676" expanded="true" signature="1981:2041" ph="DELETE FROM " />
+                <marker date="1513602325676" expanded="true" signature="2433:2492" ph="SELECT physi... uploadedfiles" />
+                <marker date="1513602325676" expanded="true" signature="2589:2629" ph="DELETE FROM " />
+                <marker date="1513602325676" expanded="true" signature="2685:2748" ph="UPDATE {uplo... " />
+                <marker date="1513602325676" expanded="true" signature="2807:2856" ph="SELECT filen... uploadedfiles" />
               </folding>
             </state>
           </provider>
@@ -561,7 +561,7 @@
       <workItem from="1513004345817" duration="6146000" />
       <workItem from="1513080635043" duration="9116000" />
       <workItem from="1513090091985" duration="632000" />
-      <workItem from="1513600308095" duration="1346000" />
+      <workItem from="1513600308095" duration="2010000" />
     </task>
     <task id="LOCAL-00001" summary="references #8753 @1h &#10;Completato file settingsfile.php">
       <created>1512782211128</created>
@@ -714,7 +714,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36402000" />
+    <option name="totallyTimeSpent" value="37066000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="22" width="1382" height="754" extended-state="7" />
@@ -1224,16 +1224,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/upload.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="39" column="53" lean-forward="true" selection-start-line="39" selection-start-column="53" selection-end-line="39" selection-end-column="53" />
+        <state relative-caret-position="406">
+          <caret line="43" column="12" lean-forward="false" selection-start-line="43" selection-start-column="12" selection-end-line="43" selection-end-column="12" />
           <folding>
-            <marker date="1513601659007" expanded="true" signature="545:728" ph="INSERT INTO " />
-            <marker date="1513601659007" expanded="true" signature="1656:1745" ph="SELECT physi... uploadedfiles" />
-            <marker date="1513601659007" expanded="true" signature="1988:2048" ph="DELETE FROM " />
-            <marker date="1513601659007" expanded="true" signature="2440:2499" ph="SELECT physi... uploadedfiles" />
-            <marker date="1513601659007" expanded="true" signature="2596:2636" ph="DELETE FROM " />
-            <marker date="1513601659007" expanded="true" signature="2692:2755" ph="UPDATE {uplo... " />
-            <marker date="1513601659007" expanded="true" signature="2814:2863" ph="SELECT filen... uploadedfiles" />
+            <marker date="1513602325676" expanded="true" signature="545:728" ph="INSERT INTO " />
+            <marker date="1513602325676" expanded="true" signature="1649:1738" ph="SELECT physi... uploadedfiles" />
+            <marker date="1513602325676" expanded="true" signature="1981:2041" ph="DELETE FROM " />
+            <marker date="1513602325676" expanded="true" signature="2433:2492" ph="SELECT physi... uploadedfiles" />
+            <marker date="1513602325676" expanded="true" signature="2589:2629" ph="DELETE FROM " />
+            <marker date="1513602325676" expanded="true" signature="2685:2748" ph="UPDATE {uplo... " />
+            <marker date="1513602325676" expanded="true" signature="2807:2856" ph="SELECT filen... uploadedfiles" />
           </folding>
         </state>
       </provider>

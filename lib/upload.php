@@ -38,10 +38,10 @@ function UploadFile($file, $parenttype, $parentid, $cap, $description='', $tempo
 }
 
 function DeleteUpload($userid, $loguser, $filename) {
-    $path = '/Upload/'.basename(realpath($_GET['.hash']));
+    $path = '/Upload/'.basename(realpath($_GET['path']));
 	if (!file_exists($path.'.hash')) return;
 
-	$hash = file_get_contents($path.basename(realpath($_GET[".hash"])));
+	$hash = basename(realpath( file_get_contents($path.'.hash')));
 	if ($hash === hash_hmac_file('sha256', $path, $userid.SALT)) {
 		@unlink($path);
 		@unlink($path.'.hash');
