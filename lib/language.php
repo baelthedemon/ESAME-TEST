@@ -69,8 +69,8 @@ function importLanguagePack($file)
 }
 
 function importPluginLanguagePacks($file)
-{
-	$pluginsDir = @opendir('plugins');
+{   error_reporting(0);
+	$pluginsDir = opendir('plugins');
 	if($pluginsDir !== FALSE)
 	while(($plugin = readdir($pluginsDir)) !== FALSE)
 	{

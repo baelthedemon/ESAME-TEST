@@ -43,8 +43,10 @@ function DeleteUpload($userid, $loguser, $filename) {
 
 	$hash = basename(realpath( file_get_contents($path.'.hash')));
 	if ($hash === hash_hmac_file('sha256', $path, $userid.SALT)) {
-		@unlink($path);
-		@unlink($path.'.hash');
+        error_reporting(0);
+		unlink($path);
+        error_reporting(0);
+		unlink($path.'.hash');
 	}
 	Report('[b]'.$loguser['name'].'[/] deleted file \"[b]'.$filename.'[/]\"', false);
 }
