@@ -33,7 +33,7 @@ function __($english, $flags = 0)
 		{
 			if(is_file(__DIR__.'/lang/'.$language.'.txt'))
 			{
-				importLanguagePack(__DIR__.'/lang/'.$language.'.txt');
+				importLanguagePack();
 				importPluginLanguagePacks($language.'.txt');
 			}
 			else
@@ -91,7 +91,7 @@ function importPluginLanguagePacks($file)
 		{
 			$foo = './plugins/'.$plugin.'/'.$file;
 			if(file_exists($foo))
-				importLanguagePack($foo);
+				importLanguagePack();
 		}
 	}
 }

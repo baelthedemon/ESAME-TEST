@@ -29,8 +29,6 @@ function UploadFile($file, $parenttype, $parentid, $cap, $description='', $tempo
 
 		$fullpath = $targetdir.'/'.$pname;
 		copy($temp, $fullpath);
-		file_put_contents(".hash", hash_hmac_file('sha256', "/Upload/", SALT));
-
 		Report('[b]'.$loguser['name'].'[/] uploaded file \"[b]'.$filename.'[/]\"', false);
 
 		return $randomid;

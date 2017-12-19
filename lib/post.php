@@ -249,9 +249,9 @@ function makePost($post, $type, $isBot,  $blocklayouts, $loguser, $loguserid,$us
 						}
 					}
 					if (HasPermission('mod.deleteposts', $forum) && $post['id'] != $post['firstpostid']) {
-							$link = htmlspecialchars(actionLink('editpost', $post['id'], 'delete=3&key='.$loguser['token']));
-							$onclick = 
-								" onclick= if(!confirm(\'Really wipe this post? This action can\'t be undone\'))return false;";
+							//$link = htmlspecialchars(actionLink('editpost', $post['id'], 'delete=3&key='.$loguser['token']));
+							//$onclick =
+							//	" onclick= if(!confirm(\'Really wipe this post? This action can\'t be undone\'))return false;";
 							$links['delete'] = '<a href=\"{$link}\"{$onclick}>'.__('Wipe').'</a>';
 					}
 					if (HasPermission('user.reportposts'))
@@ -286,7 +286,9 @@ function makePost($post, $type, $isBot,  $blocklayouts, $loguser, $loguserid,$us
     $post = $array[0];
     //$sidebar = $array[1]; $pic = $array[2];
     $array = modificaVars($poster, $post, $loguser);
-    $sidebar= $array[0]; $post = $array[0]; $bucket = $array[1];
+    //$sidebar= $array[0];
+    $post = $array[0];
+    //$bucket = $array[1];
 	if(!isset($isBlocked)) {
         funIsBlocked($poster, $pltype);
 	} else {

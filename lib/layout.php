@@ -42,7 +42,7 @@ function RenderTemplate($template,$tpl, $mobileLayout=true, $options=null) {
 	$tpl->display($tplname);
 }
 
-function makeCrumbs($path, $links='') {
+function makeCrumbs($path) {
 
 
 	if(count($path) != 0) {
@@ -114,12 +114,12 @@ function makeForumList($fieldname, $selectedID,$forumBoards, $allowNone=false) {
 
 		$cname = $cat['name'];
 		if (isset($cat['board'])) $cname = $forumBoards[$cat['board']].' - '.$cname;
-
-		$theList =
+    /*	$theList =
      '			<optgroup label="'.htmlspecialchars($cname).'">
      '.mfl_forumBlock($fora, $cid, $selectedID, 0).
      '			</optgroup>
-     ';
+     ';*/
+
 	}
 
 	return "<select id=\"$fieldname\" name=\"$fieldname\">$noneOption$theList</select>";
