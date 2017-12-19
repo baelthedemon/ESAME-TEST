@@ -127,7 +127,8 @@ function HasPermission($perm, $guestPermset=[], $loguserPermset=[],  $arg=0, $gu
 
 /*in questo caso per risolvere la 9337 ho aggiunto le variabili globali come parametri dato che nella funzione CheckPermission
 venivano solo usate per il valore che portavano con sè, ho inoltre dichiarato tali parametri come opzionali impostando un
-valido valore di default. */
+valido valore di default.
+From Giosh96 */
 
 function CheckPermission($perm, $loguserid=0, $loguser=[], $arg=0, $guest=false) {
 
@@ -143,7 +144,8 @@ function CheckPermission($perm, $loguserid=0, $loguser=[], $arg=0, $guest=false)
 
 /*in questo caso per risolvere la 9337 ho aggiunto le variabili globali come parametri dato che nella funzione ForumsWithPermission
 venivano solo usate per il valore che portavano con sè, ho inoltre dichiarato tali parametri come opzionali impostando un
-valido valore di default. */
+valido valore di default.
+From Giosh96 */
 
 function ForumsWithPermission($perm, $guestPermset=[], $loguserPermset=[], $guest=false) {
 

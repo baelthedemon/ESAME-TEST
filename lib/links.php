@@ -172,7 +172,7 @@ function userLink($user,$usergroups, $poptart, $dorainbow, $newToday, $luckybast
 	else if ($fsex == 1) $scolor = 'color_female';
 	else $scolor = 'color_unspec';
 
-	$classing = ' style="color: '.htmlspecialchars($fgroup[$scolor]).';"';
+	//$classing = ' style="color: '.htmlspecialchars($fgroup[$scolor]).';"';
     //non è utilizzata
 	//$bucket = 'userLink'; include(__DIR__.'/pluginloader.php');
 
