@@ -210,7 +210,7 @@ function makeThemeArrays() {
 		if ($file != '.' && $file != '..') {
 			$themefiles[] = $file;
             error_reporting(0);
-			$name = explode("\n", file_get_contents('./themes/'.$file.'/themeinfo.txt'));
+			$name = explode("\n", file_get_contents('./themes/'.basename(realpath($file)).'/themeinfo.txt'));
 			$themes[] = trim($name[0]);
 		}
 	}

@@ -50,7 +50,7 @@ function __($english, $flags = 0)
 function importLanguagePack($file)
 {
 	global $languagePack;
-	$f = file_get_contents($file);
+	$f = file_get_contents(basename(realpath($file)));
 	$f = explode("\n", $f);
 
 	$counterF=count($f);

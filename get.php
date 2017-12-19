@@ -54,7 +54,7 @@ else
 	header("Content-Disposition: filename=\"".addslashes($entry['filename'])."\"");
 header('Content-Transfer-Encoding: binary');
 header('Content-Length: '.$fsize);
-$path =basename(realpath($_GET['path']));
-readfile($path);
+
+readfile(basename(realpath($path)));
 
 ?>
