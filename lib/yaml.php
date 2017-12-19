@@ -315,7 +315,7 @@ class Spyc {
 	 * @param $value The value of the item
 	 * @param $indent The indent of the current node
 	 */
-  private function _dumpNode($key, $value, $indent, $previous_key = -1, $first_key = 0, $source_array = null) {
+  private function _dumpNode($key, $value, $indent, $source_array = null) {
 	// do some folding here, for blocks
 	if (is_string ($value) && ((strpos($value,"\n") !== false || strpos($value,': ') !== false || strpos($value,'- ') !== false ||
 	  strpos($value,'*') !== false || strpos($value,'#') !== false || strpos($value,'<') !== false || strpos($value,'>') !== false || strpos ($value, '%') !== false || strpos ($value, '  ') !== false ||
@@ -566,7 +566,6 @@ class Spyc {
 	$line = trim($line);
 	if (!isset($line)) return [];
 
-	$array = [];
 
 	$group = $this->nodeContainsGroup($line);
 	if (isset($group)) {
@@ -697,8 +696,8 @@ class Spyc {
   private function _inlineEscape($inline) {
 	$seqs = [];
 	$maps = [];
-	$saved_strings = [];
-	$saved_empties = [];
+
+
 
 	// Check for empty strings
 	$regex = "/(\"\")|(\'\')/";
@@ -737,7 +736,7 @@ class Spyc {
 
 	$explode = explode(',',$inline);
 	$explode = array_map('trim', $explode);
-	$stringi = 0; $i = 0;
+	$i = 0;
 
 	while (1) {
 	$explode = readdThings($seqs, $explode);
@@ -1022,16 +1021,16 @@ class Spyc {
 
 	return true;
   }
+        /*
+         private function isHashElement ($line) {
+           return strpos($e, ':');
+         }
 
-  private function isHashElement ($line) {
-	return strpos($line, ':');
-  }
-
- /* private function isLiteral ($line) {
-	if ($this->isArrayElement($line)) return false;
-	if ($this->isHashElement($line)) return false;
-	return true;
-  }*/
+        /* private function isLiteral ($line) {
+           if ($this->isArrayElement($line)) return false;
+           if ($this->isHashElement($line)) return false;
+           return true;
+         }*/
 
 
   /*private static function unquote ($value) {
@@ -1135,7 +1134,7 @@ class Spyc {
 
   }
 
-  private function addGroup ($line, $group) {
+  private function addGroup ($group) {
 	if ($group[0] == '&') $this->_containsGroupAnchor = substr ($group, 1);
 	if ($group[0] == '*') $this->_containsGroupAlias = substr ($group, 1);
 	//print_r ($this->path);
