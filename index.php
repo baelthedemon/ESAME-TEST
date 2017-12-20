@@ -17,7 +17,10 @@ $layout_actionlinks = '';
 
 if (isset($_GET['forcelayout'])) {
 	setcookie('forcelayout', (int)$_GET['forcelayout'], time()+365*24*3600, URL_ROOT, '', false, true);
-	trigger_error(header('Location: '.$_SERVER['HTTP_REFERER']));
+	//fix del open-redirect in sicurezza
+	$server = $_SERVER['HTTP_REFERER'];
+	$server = check($server);
+	trigger_error(header('Location: '.rawurlencode($server)));
 }
 
 $layout_birthdays = getBirthdaysText();
@@ -197,11 +200,10 @@ if (file_exists(URL_ROOT.'/themes/$theme/logo.png')) {
 	$logo = '<h1>'.$layout_boardtitle.'</h1><h3>'.$layout_description.'</h3>';
 }
 
-function checkForImage(&$image, $external, $file) {
-	global $dataDir, $dataUrl;
-	if(isset($image)) return;
+function checkForImage(&$image, $external, $file, $dataDir=null, $dataUrl=null) {
+		if(isset($image)) return;
 	if(isset($external)) {
-		if(file_exists($dataDir.$file))
+		if(file_exists($dataDir.$file) && isset($dataUrl))
 			$image = $dataUrl.$file;
 	} else {
 		if(file_exists($file))

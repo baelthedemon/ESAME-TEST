@@ -24,9 +24,15 @@ function get_data()
     return $data;
 }
 
-function __($english, $flags = 0)
+/*risoluzione 9337:
+da    function __($english, $flags = 0)
 {
 	global $languagePack, $language;
+a  function __($english, $languagePack=null, $language=null, $flags = 0)
+From Giosh96  */
+
+function __($english, $languagePack=null, $language=null, $flags = 0)
+{
 	if($language != 'en_US')
 	{
 		if(!isset($languagePack))
@@ -61,7 +67,7 @@ function __($english, $flags = 0)
 
 function importLanguagePack()
 {
-	global $languagePack;
+	$languagePack=[];
 	$f = get_data();
 	$f = explode("\n", $f);
 
@@ -78,6 +84,7 @@ function importLanguagePack()
 			continue;
 		$languagePack[$k] = $v;
 	}
+	return $languagePack;
 }
 
 function importPluginLanguagePacks($file)
