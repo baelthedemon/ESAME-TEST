@@ -246,6 +246,8 @@ if(isset($loguser)) {
 if ($loguser['flags'] & 0x1) {
 	Query('INSERT INTO {ipbans} (ip,reason,date) VALUES ({0},{1},0)',
 		$_SERVER['REMOTE_ADDR'], '['.htmlspecialchars($loguser['name']).'] Account IP-banned');
+	$server = $_SERVER['REQUEST_URI'];
+	$server = check($server);
 	trigger_error(header('Location: '.rawurlencode($_SERVER['REQUEST_URI'])));
 }
 

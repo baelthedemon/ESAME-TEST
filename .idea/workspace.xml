@@ -4,9 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/lib/settingssystem.php" line="119" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="584bf53c-ef7f-4a20-ad3f-707b17fdb895" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
-    </list>
+    <list default="true" readonly="true" id="584bf53c-ef7f-4a20-ad3f-707b17fdb895" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,12 +25,42 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="19" column="40" lean-forward="false" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+            <state relative-caret-position="340">
+              <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="loguser.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/loguser.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="409">
+              <caret line="249" column="29" lean-forward="false" selection-start-line="249" selection-start-column="29" selection-end-line="249" selection-end-column="29" />
+              <folding>
+                <marker date="1513802389110" expanded="true" signature="3147:3167" ph="select * fro... misc" />
+                <marker date="1513802389110" expanded="true" signature="3218:3301" ph="select id fr... users" />
+                <marker date="1513802389110" expanded="true" signature="3662:3707" ph="select count... posts" />
+                <marker date="1513802389110" expanded="true" signature="3757:3802" ph="select count... posts" />
+                <marker date="1513802389110" expanded="true" signature="4154:4172" ph="update {misc... " />
+                <marker date="1513802389110" expanded="true" signature="4374:4411" ph="delete from " />
+                <marker date="1513802389110" expanded="true" signature="4459:4574" ph="update {user... " />
+                <marker date="1513802389110" expanded="true" signature="4615:4666" ph="delete from " />
+                <marker date="1513802389110" expanded="true" signature="4712:4777" ph="delete from " />
+                <marker date="1513802389110" expanded="true" signature="4835:4880" ph="select * fro... ipbans" />
+                <marker date="1513802389110" expanded="true" signature="6091:6128" ph="SELECT * FRO... sessions" />
+                <marker date="1513802389110" expanded="true" signature="6219:6253" ph="SELECT * FRO... users" />
+                <marker date="1513802389110" expanded="true" signature="6322:6371" ph="UPDATE {sess... " />
+                <marker date="1513802389110" expanded="true" signature="6657:6704" ph="UPDATE {sess... " />
+                <marker date="1513802389110" expanded="true" signature="6733:6788" ph="DELETE FROM " />
+                <marker date="1513802389110" expanded="true" signature="7310:7366" ph="INSERT INTO " />
+                <marker date="1513802389110" expanded="true" signature="7881:7916" ph="delete from " />
+                <marker date="1513802389110" expanded="true" signature="8175:8264" ph="insert into " />
+                <marker date="1513802389110" expanded="true" signature="8391:8498" ph="update {user... " />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -69,7 +97,6 @@
         <option value="$PROJECT_DIR$/layouts/userpanel.php" />
         <option value="$PROJECT_DIR$/lib/onlineusers.php" />
         <option value="$PROJECT_DIR$/lib/permstrings.php" />
-        <option value="$PROJECT_DIR$/lib/loguser.php" />
         <option value="$PROJECT_DIR$/rss.php" />
         <option value="$PROJECT_DIR$/lib/passhash.php" />
         <option value="$PROJECT_DIR$/get.php" />
@@ -96,6 +123,7 @@
         <option value="$PROJECT_DIR$/js/jquery.scrollTo-1.4.2-min.js" />
         <option value="$PROJECT_DIR$/lib/urlslugs.php" />
         <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/lib/loguser.php" />
       </list>
     </option>
   </component>
@@ -107,9 +135,9 @@
   </component>
   <component name="PhpDebugGeneral" listening_started="true" />
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="305" />
-    <option name="y" value="96" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="3" />
+    <option name="y" value="74" />
     <option name="width" value="974" />
     <option name="height" value="1057" />
   </component>
@@ -456,7 +484,7 @@
       <workItem from="1513716247278" duration="2109000" />
       <workItem from="1513719504244" duration="1756000" />
       <workItem from="1513725358543" duration="1750000" />
-      <workItem from="1513801763955" duration="176000" />
+      <workItem from="1513801763955" duration="734000" />
     </task>
     <task id="LOCAL-00001" summary="references #8753 @1h &#10;Completato file settingsfile.php">
       <created>1512782211128</created>
@@ -654,15 +682,21 @@
       <option name="project" value="LOCAL" />
       <updated>1513726891129</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="references #10072 @10m &#10;&#10;fix per il controllo degli indirizzi http dei server">
+      <created>1513802493119</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1513802493119</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="59466000" />
+    <option name="totallyTimeSpent" value="60024000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="22" width="1936" height="1066" extended-state="7" />
-    <editor active="true" />
+    <frame x="3" y="74" width="974" height="1057" extended-state="0" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -676,7 +710,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15416667" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30897704" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -700,7 +734,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="references #8753 @1h &#10;Completato file browsers.php" />
     <MESSAGE value="references #8753 @30m &#10;Completato file bbcode_callback.php" />
     <MESSAGE value="references #8753 @15m &#10;Completato file link.php" />
     <MESSAGE value="references #8753 @45m &#10;Completato file layout.php" />
@@ -725,7 +758,8 @@
     <MESSAGE value="references #9347 #9348 @5m &#10;Fix di tutti i difetti presenti. Commentando le variabili in quanto non utilizzate nella funzione." />
     <MESSAGE value="references #9343 @10m &#10;Fix di tutti i difetti presenti. Eliminando i valori passati in imput a funzioni che non accettavano questo numero di parametri" />
     <MESSAGE value="references #9348 @10m &#10;references #9347 @3m&#10;references #9344 @5m&#10;references #9349 @3m&#10;Fix di tutti i difetti presenti. Dovrebbero essere state completate tutte le issue." />
-    <option name="LAST_COMMIT_MESSAGE" value="references #9348 @10m &#10;references #9347 @3m&#10;references #9344 @5m&#10;references #9349 @3m&#10;Fix di tutti i difetti presenti. Dovrebbero essere state completate tutte le issue." />
+    <MESSAGE value="references #10072 @10m &#10;&#10;fix per il controllo degli indirizzi http dei server" />
+    <option name="LAST_COMMIT_MESSAGE" value="references #10072 @10m &#10;&#10;fix per il controllo degli indirizzi http dei server" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -879,13 +913,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/loguser.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="199" column="1" lean-forward="true" selection-start-line="199" selection-start-column="1" selection-end-line="199" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rss.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="273">
@@ -1010,6 +1037,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="69">
           <caret line="117" column="28" lean-forward="false" selection-start-line="117" selection-start-column="28" selection-end-line="117" selection-end-column="28" />
+          <folding>
+            <marker date="1513717756714" expanded="true" signature="3950:4130" ph="INSERT INTO $... " />
+            <marker date="1513717756714" expanded="true" signature="4708:4729" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1166,9 +1197,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="19" column="40" lean-forward="false" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+        <state relative-caret-position="340">
+          <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/loguser.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="409">
+          <caret line="249" column="29" lean-forward="false" selection-start-line="249" selection-start-column="29" selection-end-line="249" selection-end-column="29" />
+          <folding>
+            <marker date="1513802389110" expanded="true" signature="3147:3167" ph="select * fro... misc" />
+            <marker date="1513802389110" expanded="true" signature="3218:3301" ph="select id fr... users" />
+            <marker date="1513802389110" expanded="true" signature="3662:3707" ph="select count... posts" />
+            <marker date="1513802389110" expanded="true" signature="3757:3802" ph="select count... posts" />
+            <marker date="1513802389110" expanded="true" signature="4154:4172" ph="update {misc... " />
+            <marker date="1513802389110" expanded="true" signature="4374:4411" ph="delete from " />
+            <marker date="1513802389110" expanded="true" signature="4459:4574" ph="update {user... " />
+            <marker date="1513802389110" expanded="true" signature="4615:4666" ph="delete from " />
+            <marker date="1513802389110" expanded="true" signature="4712:4777" ph="delete from " />
+            <marker date="1513802389110" expanded="true" signature="4835:4880" ph="select * fro... ipbans" />
+            <marker date="1513802389110" expanded="true" signature="6091:6128" ph="SELECT * FRO... sessions" />
+            <marker date="1513802389110" expanded="true" signature="6219:6253" ph="SELECT * FRO... users" />
+            <marker date="1513802389110" expanded="true" signature="6322:6371" ph="UPDATE {sess... " />
+            <marker date="1513802389110" expanded="true" signature="6657:6704" ph="UPDATE {sess... " />
+            <marker date="1513802389110" expanded="true" signature="6733:6788" ph="DELETE FROM " />
+            <marker date="1513802389110" expanded="true" signature="7310:7366" ph="INSERT INTO " />
+            <marker date="1513802389110" expanded="true" signature="7881:7916" ph="delete from " />
+            <marker date="1513802389110" expanded="true" signature="8175:8264" ph="insert into " />
+            <marker date="1513802389110" expanded="true" signature="8391:8498" ph="update {user... " />
+          </folding>
         </state>
       </provider>
     </entry>
